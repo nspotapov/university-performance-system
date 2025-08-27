@@ -1,2 +1,3 @@
-from .base_repository import BaseRepository
-from .user_repository import UserRepository
+from .abstract_repository import AbstractRepository
+from .sqlalchemy_repository import SQLAlchemyRepository
+from .users_repository import UsersRepository

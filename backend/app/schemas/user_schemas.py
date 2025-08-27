@@ -1,27 +1,20 @@
 from pydantic import Field, EmailStr
 
-from app.schemas import BaseSchema
+from .base_schemas import BaseCreateSchema, BaseReadSchema, BaseUpdateSchema
 
 
-class UserCreateSchema(BaseSchema):
-    name: str = Field(description="Имя")
-    surname: str = Field(description="Фамилия")
-    patronymic: str | None = Field(description="Отчество", default=None)
-    email: EmailStr = Field(description="Адрес электронной почты")
-    password: str = Field(description="Пароль")
+class UserCreateSchema(BaseCreateSchema):
+    name: str = Field(max_length=64)
+    email: EmailStr
+    password: str = Field(max_length=64)
 
 
-class UserUpdateSchema(BaseSchema):
-    name: str | None = Field(description="Имя", default=None)
-    surname: str | None = Field(description="Фамилия", default=None)
-    patronymic: str | None = Field(description="Отчество", default=None)
-    email: EmailStr | None = Field(description="Адрес электронной почты", default=None)
-    password: str | None = Field(description="Пароль", default=None)
+class UserReadSchema(BaseReadSchema):
+    name: str
+    email: str
 
 
-class UserSchema(BaseSchema):
-    id: int
-    name: str = Field(description="Имя")
-    surname: str = Field(description="Фамилия")
-    patronymic: str | None = Field(description="Отчество", default=None)
-    email: EmailStr = Field(description="Адрес электронной почты")
+class UserUpdateSchema(BaseUpdateSchema):
+    name: None | str = Field(max_length=64)
+    email: None | EmailStr
+    password: None | str = Field(max_length=64)

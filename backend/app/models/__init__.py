@@ -1,2 +1,2 @@
-from .abstract_model import AbstractModel
 from .user_model import User
+from .base_model import DBModel
