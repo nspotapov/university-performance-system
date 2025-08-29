@@ -12,6 +12,7 @@ class UserCreateSchema(BaseCreateSchema):
 class UserReadSchema(BaseReadSchema):
     name: str
     email: str
+    hashed_password: str = Field(exclude=True)
 
 
 class UserUpdateSchema(BaseUpdateSchema):

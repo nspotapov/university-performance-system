@@ -1,8 +1,9 @@
 from typing import Annotated, List
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, status
 
 from app.api.dependencies import get_users_service
+from app.common.security import jwt_security
 from app.schemas.user_schemas import UserCreateSchema, UserReadSchema
 from app.services import UsersService
 
@@ -11,8 +12,9 @@ router = APIRouter(
     tags=["Users"],
 )
 
+# dependencies=[Depends(jwt_security.access_token_required)]
 
-@router.post("")
+@router.post("", status_code=status.HTTP_201_CREATED)
 async def add_user(
         user: UserCreateSchema,
         users_service: Annotated[UsersService, Depends(get_users_service)],
@@ -21,7 +23,7 @@ async def add_user(
     return new_user
 
 
-@router.get("")
+@router.get("", dependencies=[Depends(jwt_security.access_token_required)])
 async def get_users(
         users_service: Annotated[UsersService, Depends(get_users_service)],
 ) -> List[UserReadSchema]:

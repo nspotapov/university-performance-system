@@ -1,8 +1,8 @@
-from hashlib import sha512
 from typing import Type, List, Any
 
-from fastapi import HTTPException
+from fastapi import HTTPException, status
 
+from app.common.security import get_password_hash
 from app.repositories import SQLAlchemyRepository
 from app.schemas.user_schemas import UserCreateSchema, UserReadSchema
 
@@ -15,7 +15,7 @@ class UsersService:
         user_dict = user.model_dump()
 
         if not await self.__check_email_unique(user_dict):
-            raise HTTPException(status_code=400, detail="Email is already used")
+            raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Email is already used")
 
         user_dict = self.__encrypt_user_password(user_dict)
         user_id = await self.users_repo.add_one(user_dict)
@@ -36,10 +36,6 @@ class UsersService:
 
     @classmethod
     def __encrypt_user_password(cls, user_dict: dict[str, Any]) -> dict[str, Any]:
-        user_dict["hashed_password"] = cls.__hash_password(user_dict["password"])
+        user_dict["hashed_password"] = get_password_hash(user_dict["password"])
         del user_dict["password"]
         return user_dict
-
-    @classmethod
-    def __hash_password(cls, password: str) -> str:
-        return sha512(password.encode()).hexdigest()

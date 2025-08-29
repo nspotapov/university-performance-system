@@ -13,4 +13,4 @@ class User(DBModel):
     hashed_password: Mapped[str] = mapped_column(String(256), nullable=False)
 
     def to_read_schema(self) -> UserReadSchema:
-        return UserReadSchema(id=self.id, name=self.name, email=self.email)
+        return UserReadSchema(id=self.id, name=self.name, email=self.email, hashed_password=self.hashed_password)
