@@ -3,7 +3,6 @@ import uuid
 import redis.asyncio as redis
 
 import app.config
-import app.config
 from app.schemas.otp_schemas import OTPReadSchema
 
 
