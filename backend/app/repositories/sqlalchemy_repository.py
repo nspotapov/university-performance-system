@@ -12,17 +12,17 @@ class SQLAlchemyRepository(AbstractRepository):
 
     async def add_one(self, data: dict) -> int:
         async with async_session_maker() as session:
-            stmt = insert(self.model).values(**data).returning(self.model.id)
-            res = await session.execute(stmt)
+            stmt = insert(self.model).values(**data)
+            result = await session.execute(stmt)
             await session.commit()
-            return res.scalar_one()
+            return result.lastrowid
 
     async def edit_one(self, id: int, data: dict) -> int:
         async with async_session_maker() as session:
-            stmt = update(self.model).values(**data).filter_by(id=id).returning(self.model.id)
-            res = await session.execute(stmt)
+            stmt = update(self.model).values(**data).filter_by(id=id)
+            result = await session.execute(stmt)
             await session.commit()
-            return res.scalar_one()
+            return result.lastrowid
 
     async def get_all(self) -> List[BaseReadSchema]:
         async with async_session_maker() as session:
@@ -40,10 +40,10 @@ class SQLAlchemyRepository(AbstractRepository):
 
     async def delete_one(self, id: int) -> int:
         async with async_session_maker() as session:
-            stmt = delete(self.model).filter_by(id=id).returning(self.model.id)
-            res = await session.execute(stmt)
+            stmt = delete(self.model).filter_by(id=id)
+            result = await session.execute(stmt)
             await session.commit()
-            return res.scalar_one()
+            return result.lastrowid
 
     async def find_all(self, **filter_by) -> list[BaseReadSchema]:
         async with async_session_maker() as session:

@@ -11,7 +11,7 @@ def get_password_hash(password: str) -> str:
 
 jwt_config = AuthXConfig(
     JWT_ALGORITHM=app.config.jwt_algorithm,
-    JWT_SECRET_KEY=app.config.swt_secret_key,
+    JWT_SECRET_KEY=app.config.jwt_secret_key,
     JWT_TOKEN_LOCATION=app.config.jwt_token_location,
 )
 

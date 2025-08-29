@@ -1,19 +1,34 @@
-database_url = "sqlite+aiosqlite:///data/database.sqlite"
+import os
 
-smtp_host = "smtp.beget.com"
-smtp_port = 2525
-smtp_username = "university@nspotapov.ru"
-smtp_from = "university@nspotapov.ru"
-smtp_password = "V%P2WUe2wnwL"
+database_driver = os.getenv("DATABASE_DRIVER")
+database_host = os.getenv("DATABASE_HOST")
+database_port = int(os.getenv("DATABASE_PORT"))
+database_name = os.getenv("DATABASE_NAME")
+database_username = os.getenv("DATABASE_USERNAME")
+database_password = os.getenv("DATABASE_PASSWORD")
 
-otp_code_expired_time = 5  # minutes
+database_url = ''.join(
+    [
+        database_driver, "://",
+        database_username, ":", database_password, ("@" if database_username or database_password else ""),
+        database_host, (":" if str(database_port) else ""), str(database_port), "/", database_name
+    ]
+)
 
-redis_host = "127.0.0.1"
-redis_port = 6379
-redis_username = None
-redis_password = None
-redis_db = 0
+smtp_host = os.getenv("SMTP_HOST")
+smtp_port = os.getenv("SMTP_PORT")
+smtp_username = os.getenv("SMTP_USERNAME")
+smtp_from = os.getenv("SMTP_FROM")
+smtp_password = os.getenv("SMTP_PASSWORD")
 
-jwt_algorithm = "HS256"
-swt_secret_key = "SECRET_KEY"
+otp_code_expired_time = int(os.getenv("OTP_CODE_EXPIRED_TIME", "5"))  # minutes
+
+redis_host = os.getenv("REDIS_HOST")
+redis_port = int(os.getenv("REDIS_PORT"))
+redis_username = os.getenv("REDIS_USERNAME")
+redis_password = os.getenv("REDIS_PASSWORD")
+redis_db = int(os.getenv("REDIS_DB", "0"))
+
+jwt_algorithm = os.getenv("JWT_ALGORITHM", "HS256")
+jwt_secret_key = os.getenv("JWT_SECRET_KEY")
 jwt_token_location = ["headers", "cookies", "query"]

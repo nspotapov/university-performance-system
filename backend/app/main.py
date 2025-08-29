@@ -1,4 +1,12 @@
+import os
+
+import dotenv
 from fastapi import FastAPI, APIRouter
+
+BASE_DIR: str = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+
+if os.path.exists(os.path.join(BASE_DIR, ".env")):
+    dotenv.load_dotenv(os.path.join(BASE_DIR, ".env"))
 
 from app.common.security import jwt_security
 
