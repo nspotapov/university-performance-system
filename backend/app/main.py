@@ -2,6 +2,7 @@ import os
 
 import dotenv
 from fastapi import FastAPI, APIRouter
+from fastapi.middleware.cors import CORSMiddleware
 
 BASE_DIR: str = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 
@@ -10,7 +11,16 @@ if os.path.exists(os.path.join(BASE_DIR, ".env")):
 
 from app.common.security import jwt_security
 
+
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 jwt_security.handle_errors(app)
 
