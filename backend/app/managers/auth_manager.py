@@ -35,7 +35,7 @@ class AuthManager:
         if user is None:
             return None
 
-        is_verified = await self._otp_service.verify_code(user.id, schema.otp_code)
+        is_verified = await self._otp_service.verify_otp_code(user.id, schema.otp_code, delete_code=True)
 
         if not is_verified:
             return None

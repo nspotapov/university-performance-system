@@ -47,14 +47,3 @@ async def login_user(
 @router.post("/logout")
 async def logout_user(response: Response):
     response.delete_cookie(jwt_security.config.JWT_ACCESS_COOKIE_NAME)
-
-
-@router.get("/current")
-async def get_current_user(users_service: Annotated[UsersService, Depends(get_users_service)],
-                           payload: TokenPayload = Depends(jwt_security.access_token_required)):
-    user = await users_service.get_user(int(payload.sub))
-
-    if user is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
-
-    return user
