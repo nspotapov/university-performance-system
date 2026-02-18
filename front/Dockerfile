@@ -14,7 +14,7 @@ FROM base AS deps
 
 COPY package*.json ./
 
-RUN npm ci --omit=dev --prefer-offline --no-audit
+RUN npm ci --prefer-offline --no-audit
 
 ####################################################
 #################### BUILD APP #####################
@@ -33,8 +33,6 @@ RUN npm run build
 ####################################################
 
 FROM base AS runner
-
-# COPY --from=deps /app/node_modules ./node_modules
 
 COPY --from=builder /app/.output ./.output
 

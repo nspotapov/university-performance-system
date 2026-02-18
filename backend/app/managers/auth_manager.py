@@ -2,14 +2,14 @@ from typing import Type
 
 import app.config
 from app.common.security import jwt_security
-from app.repositories import SQLAlchemyRepository
+from app.repositories import SQLAlchemyRepository, OTPRepository
 from app.schemas.auth_schemas import AuthLoginSchema, AuthOTPLoginSchema
 from app.schemas.user_schemas import UserReadSchema
 from app.services import AuthService, OTPService, MailService
 
 
 class AuthManager:
-    def __init__(self, otp_repo: Type[SQLAlchemyRepository], users_repo: Type[SQLAlchemyRepository]):
+    def __init__(self, otp_repo: Type[OTPRepository], users_repo: Type[SQLAlchemyRepository]):
         self._auth_service = AuthService(users_repo)
         self._otp_service = OTPService(otp_repo)
         self._mail_service = MailService()

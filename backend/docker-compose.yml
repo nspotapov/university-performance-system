@@ -1,0 +1,86 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 127.0.0.1:8000:8000
+    env_file:
+      - path: .env
+        required: true
+    environment:
+      TZ: ${TZ:-Europe/Ulyanovsk}
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    restart: unless-stopped
+    logging: &logging-default
+      driver: "json-file"
+      options:
+        max-file: "1"
+        max-size: "10m"
+
+  db:
+    image: mysql:8.0-bookworm
+    environment:
+      TZ: ${TZ:-Europe/Ulyanovsk}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-app}
+      MYSQL_USER: ${MYSQL_USERNAME:-appuser}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-secret}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-supersecret}
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "-u", "root", "--password=${MYSQL_ROOT_PASSWORD:-supersecret}", "ping", "-h", "localhost" ]
+      timeout: 5s
+
+      start_period: 5s
+      interval: 5s
+      retries: 10
+    restart: unless-stopped
+    logging: *logging-default
+
+  redis:
+    image: redis:8.2.1
+    environment:
+      TZ: ${TZ:-Europe/Ulyanovsk}
+    restart: unless-stopped
+    logging: *logging-default
+
+  mailhog:
+    image: mailhog/mailhog
+    environment:
+      TZ: ${TZ:-Europe/Ulyanovsk}
+    ports:
+      - 127.0.0.1:8025:8025
+    restart: unless-stopped
+    logging: *logging-default
+
+  redisinsight:
+    image: redis/redisinsight
+    environment:
+      TZ: ${TZ:-Europe/Ulyanovsk}
+      RI_REDIS_HOST: redis
+    ports:
+      - 127.0.0.1:5540:5540
+    volumes:
+      - redisinsight_data:/data
+    logging: *logging-default
+
+  adminer:
+    image: adminer
+    environment:
+      TZ: ${TZ:-Europe/Ulyanovsk}
+    ports:
+      - 127.0.0.1:8080:8080
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+    logging: *logging-default
+
+volumes:
+  mysql_data:
+  redisinsight_data:

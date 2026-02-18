@@ -1,8 +1,8 @@
-from pydantic import BaseModel, EmailStr, Field
+from pydantic import BaseModel, EmailStr
 
 
 class AuthLoginSchema(BaseModel):
-    email: EmailStr = Field(examples=["ns.potapov@yandex.ru"])
+    email: EmailStr
     password: str
 
 

@@ -11,7 +11,6 @@ if os.path.exists(os.path.join(BASE_DIR, ".env")):
 
 from app.common.security import jwt_security
 
-
 app = FastAPI()
 
 app.add_middleware(
