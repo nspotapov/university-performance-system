@@ -1,7 +1,9 @@
-from .auth_router import router as auth_router
-from .users_router import router as router_users
+from .auth_router import router as auth
+from .users_router import router as users
+from .common_router import router as common
 
 all_routers = [
-    router_users,
-    auth_router
+    users,
+    auth,
+    common
 ]
