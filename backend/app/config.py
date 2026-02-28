@@ -1,15 +1,8 @@
 import os
 
-import dotenv
-
-BASE_DIR: str = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-
-if os.path.exists(os.path.join(BASE_DIR, ".env")):
-    dotenv.load_dotenv(os.path.join(BASE_DIR, ".env"))
-
 debug = bool(os.getenv("DEBUG"))
 
-database_driver = os.getenv("DATABASE_DRIVER")
+database_driver = "mysql+aiomysql"
 database_host = os.getenv("DATABASE_HOST")
 database_port = os.getenv("DATABASE_PORT")
 database_name = os.getenv("DATABASE_NAME")
@@ -32,7 +25,7 @@ smtp_from = os.getenv("SMTP_FROM")
 smtp_password = os.getenv("SMTP_PASSWORD")
 
 otp_code_expired_time = int(os.getenv("OTP_CODE_EXPIRED_TIME", "300"))
-otp_code_mockup = os.getenv("OTP_CODE_MOCKUP", None)
+otp_code_mockup = os.getenv("OTP_CODE_MOCKUP")
 
 redis_host = os.getenv("REDIS_HOST")
 redis_port = int(os.getenv("REDIS_PORT", "6379"))
