@@ -13,9 +13,6 @@ class OTPService:
     async def create_otp_code(self, user_id: int) -> OTPReadSchema:
         code = str(random.randint(1000, 9999))
 
-        if app.config.otp_code_mockup is not None:
-            code = app.config.otp_code_mockup
-
         return await self.otp_repo.add_one(user_id, code)
 
     async def verify_otp_code(

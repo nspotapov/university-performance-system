@@ -25,7 +25,6 @@ smtp_from = os.getenv("SMTP_FROM")
 smtp_password = os.getenv("SMTP_PASSWORD")
 
 otp_code_expired_time = int(os.getenv("OTP_CODE_EXPIRED_TIME", "300"))
-otp_code_mockup = os.getenv("OTP_CODE_MOCKUP")
 
 redis_host = os.getenv("REDIS_HOST")
 redis_port = int(os.getenv("REDIS_PORT", "6379"))
