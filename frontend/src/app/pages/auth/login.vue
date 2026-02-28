@@ -27,7 +27,10 @@
         />
       </UFormField>
 
-      <UButton type="submit">
+      <UButton
+        class="w-full justify-center"
+        type="submit"
+      >
         Войти
       </UButton>
     </UForm>
@@ -73,8 +76,8 @@ definePageMeta({
 })
 
 const schema = v.object({
-  email: v.pipe(v.string(), v.email('Неверный формат email')),
-  password: v.pipe(v.string()),
+  email: v.pipe(v.string(), v.minLength(1, "Введите email"), v.email('Неверный формат')),
+  password: v.pipe(v.string(), v.minLength(1, "Введите пароль")),
 })
 
 const state = reactive({

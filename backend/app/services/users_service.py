@@ -15,7 +15,9 @@ class UsersService:
         user_dict = user.model_dump()
 
         if not await self.__check_email_unique(user_dict):
-            raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Email is already used")
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT, detail="Email is already used"
+            )
 
         user_dict = self.__encrypt_user_password(user_dict)
         user_id = await self.users_repo.add_one(user_dict)

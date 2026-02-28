@@ -15,8 +15,8 @@ router = APIRouter(
 
 @router.post("", status_code=status.HTTP_201_CREATED)
 async def add_user(
-        user: UserCreateSchema,
-        users_service: Annotated[UsersService, Depends(get_users_service)],
+    user: UserCreateSchema,
+    users_service: Annotated[UsersService, Depends(get_users_service)],
 ) -> UserReadSchema:
     new_user = await users_service.add_user(user)
     return new_user
@@ -24,7 +24,7 @@ async def add_user(
 
 @router.get("", dependencies=[Depends(jwt_security.access_token_required)])
 async def get_users(
-        users_service: Annotated[UsersService, Depends(get_users_service)],
+    users_service: Annotated[UsersService, Depends(get_users_service)],
 ) -> List[UserReadSchema]:
     users = await users_service.get_users()
     return users
