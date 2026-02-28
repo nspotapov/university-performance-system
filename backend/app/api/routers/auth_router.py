@@ -33,7 +33,7 @@ async def login_user(
 
 
 @router.post("/otp")
-async def login_user(
+async def login_user_otp(
     schema: AuthOTPLoginSchema,
     auth_manager: Annotated[AuthManager, Depends(get_auth_manager)],
     response: Response,
