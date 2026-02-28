@@ -18,7 +18,9 @@ class OTPService:
 
         return await self.otp_repo.add_one(user_id, code)
 
-    async def verify_otp_code(self, user_id: int, code: str, delete_code: bool = False) -> bool:
+    async def verify_otp_code(
+        self, user_id: int, code: str, delete_code: bool = False
+    ) -> bool:
         user_otp_codes = await self.otp_repo.find_all(user_id=user_id)
 
         for user_otp_code in user_otp_codes:

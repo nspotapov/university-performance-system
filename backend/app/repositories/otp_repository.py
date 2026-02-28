@@ -13,12 +13,12 @@ class OTPRepository:
             port=app.config.redis_port,
             username=app.config.redis_username,
             password=app.config.redis_password,
-            decode_responses=True
+            decode_responses=True,
         )
 
     async def add_one(self, user_id: int, code: str) -> OTPReadSchema:
         key = ":".join(["user", str(user_id), "otp_code", str(uuid.uuid4())])
-        await self._redis.setex(key, app.config.otp_code_expired_time * 60, code)
+        await self._redis.setex(key, app.config.otp_code_expired_time, code)
         return OTPReadSchema(id=key, user_id=user_id, code=code)
 
     async def find_all(self, user_id: int) -> list[OTPReadSchema]:

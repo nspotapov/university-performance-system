@@ -22,7 +22,9 @@ class MailService:
             email_msg["Subject"] = subject
             email_msg["From"] = config.smtp_from
 
-            self._server.send_message(email_msg, to_addrs=to_addr, from_addr=config.smtp_from)
+            self._server.send_message(
+                email_msg, to_addrs=to_addr, from_addr=config.smtp_from
+            )
 
             self._server.quit()
 
