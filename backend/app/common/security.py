@@ -1,12 +1,15 @@
-import hashlib
-
+import bcrypt
 from authx import AuthXConfig, AuthX
 
 import app.config
 
 
 def get_password_hash(password: str) -> str:
-    return hashlib.sha512(password.encode()).hexdigest()
+    return bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode("utf-8")
+
+
+def verify_password(password: str, hashed_password: str) -> bool:
+    return bcrypt.checkpw(password.encode(), hashed_password.encode())
 
 
 jwt_config = AuthXConfig(

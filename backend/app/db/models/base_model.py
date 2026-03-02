@@ -1,5 +1,7 @@
+import uuid
 from abc import abstractmethod
 
+from sqlalchemy import String
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 from app.schemas.base_schemas import BaseReadSchema
@@ -8,7 +10,12 @@ from app.schemas.base_schemas import BaseReadSchema
 class DBModel(DeclarativeBase):
     __abstract__ = True
 
-    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True, index=True)
+    id: Mapped[str] = mapped_column(
+        String(256),
+        primary_key=True,
+        index=True,
+        insert_default=str(uuid.uuid4())
+    )
 
     @abstractmethod
     def to_read_schema(self) -> BaseReadSchema:

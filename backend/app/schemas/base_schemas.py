@@ -10,7 +10,7 @@ class BaseCreateSchema(BaseSchema):
 
 
 class BaseReadSchema(BaseSchema):
-    id: int
+    id: str
 
     class Config:
         from_attributes = True

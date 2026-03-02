@@ -4,7 +4,7 @@ from app.schemas.otp_schemas import OTPReadSchema
 
 
 class OTP:
-    user_id: int
+    user_id: str
     code: str
     created_at: datetime.datetime
 
