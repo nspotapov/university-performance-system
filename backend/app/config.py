@@ -32,10 +32,11 @@ redis_username = os.getenv("REDIS_USERNAME")
 redis_password = os.getenv("REDIS_PASSWORD")
 redis_db = int(os.getenv("REDIS_DB", "0"))
 
+jwt_token_payload_mfa_required_key = "mfa_required"
+
 jwt_algorithm = os.getenv("JWT_ALGORITHM")
 jwt_secret_key = os.getenv("JWT_SECRET_KEY")
 jwt_token_location = ["headers", "cookies", "query", "json"]
-jwt_token_payload_2fa_required_key = "2fa_required"
 jwt_json_key = "access_token"
 jwt_refresh_json_key = "refresh_token"
 jwt_cookie_secure = False if debug else True

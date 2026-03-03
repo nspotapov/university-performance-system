@@ -1,0 +1,10 @@
+from enum import Enum
+
+
+class UserRole(str, Enum):
+    ADMIN = "ADMIN"
+    RECTOR = "RECTOR"
+    DEAN = "DEAN"
+    HEAD_TEACHER = "HEAD_TEACHER"
+    TEACHER = "TEACHER"
+    STUDENT = "STUDENT"

@@ -1,8 +1,16 @@
 import datetime
+from typing import List
 
 from pydantic import BaseModel
 
+from app.db.enums import OTPTarget
+from app.db.enums.mfa_method import MFAMethod
 from app.schemas.base_schemas import BaseResponseSchema, BaseRequestWithAccessTokenSchema
+
+
+class AuthResponseWithAccessTokenSchema(BaseResponseSchema):
+    access_token: str
+    token_type: str = "bearer"
 
 
 class AuthLoginRequestSchema(BaseModel):
@@ -10,24 +18,28 @@ class AuthLoginRequestSchema(BaseModel):
     password: str
 
 
-class AuthLoginResponseSchema(BaseResponseSchema):
-    access_token: str
-    token_type: str
+class AuthLoginResponseSchema(AuthResponseWithAccessTokenSchema):
+    require_mfa_setup: bool = False
+    require_mfa_verify: bool = False
 
 
-class AuthOTPVerifyRequestSchema(BaseRequestWithAccessTokenSchema):
-    otp_code: str
+class AuthMfaOtpVerifyRequestSchema(BaseRequestWithAccessTokenSchema):
+    code: str
 
 
-class Auth2FAOTPCodeSendRequestSchema(BaseRequestWithAccessTokenSchema):
+class AuthMfaOtpVerifyResponseSchema(AuthResponseWithAccessTokenSchema):
     pass
 
 
-class Auth2FAOTPCodeVerifyResponseSchema(BaseResponseSchema):
-    access_token: str
-    token_type: str
+class AuthMfaOtpSendRequestSchema(BaseRequestWithAccessTokenSchema):
+    pass
 
 
-class Auth2FAOTPCodeSendResponseSchema(BaseResponseSchema):
-    otp_code_exp_time: datetime.datetime
-    otp_code_send_email: str
+class AuthMfaOtpSendResponseSchema(BaseResponseSchema):
+    code_exp_time: datetime.datetime
+    code_send_target_type: OTPTarget
+    code_send_to: str
+
+
+class AuthGetCurrentUserMfaMethodResponseSchema(BaseResponseSchema):
+    mfa_method: MFAMethod

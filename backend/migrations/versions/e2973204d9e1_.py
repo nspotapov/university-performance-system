@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 0f61b3e7d4ea
+Revision ID: e2973204d9e1
 Revises: 
-Create Date: 2026-03-02 19:25:22.026218
+Create Date: 2026-03-04 01:46:05.955040
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = '0f61b3e7d4ea'
+revision: str = 'e2973204d9e1'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -25,6 +25,12 @@ def upgrade() -> None:
     sa.Column('name', sa.String(length=64), nullable=False),
     sa.Column('email', sa.String(length=256), nullable=False),
     sa.Column('hashed_password', sa.String(length=256), nullable=False),
+    sa.Column('role', sa.Enum('ADMIN', 'RECTOR', 'DEAN', 'HEAD_TEACHER', 'TEACHER', 'STUDENT', name='userrole'), nullable=False),
+    sa.Column('is_active', sa.Boolean(), nullable=False),
+    sa.Column('totp_secret', sa.String(length=255), nullable=True),
+    sa.Column('is_mfa_enabled', sa.Boolean(), nullable=False),
+    sa.Column('mfa_method', sa.Enum('TOTP', 'OTP', name='mfamethod'), nullable=False),
+    sa.Column('mfa_otp_target', sa.Enum('EMAIL', name='otptarget'), nullable=False),
     sa.Column('id', sa.String(length=256), nullable=False),
     sa.PrimaryKeyConstraint('id')
     )

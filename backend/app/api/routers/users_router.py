@@ -3,8 +3,9 @@ from typing import Annotated, List
 from fastapi import APIRouter, Depends, status
 from fastapi import HTTPException
 
-from app.api.dependencies import get_users_service, get_authorized_user
+from app.api.dependencies import get_users_service, get_authorized_user, check_role
 from app.common.security import jwt_security
+from app.db.enums.user_role import UserRole
 from app.exceptions import ApplicationException
 from app.schemas.user_schemas import UserCreateSchema, UserReadSchema
 from app.services import UsersService
@@ -30,7 +31,7 @@ async def add_user(
 @router.get("", dependencies=[Depends(jwt_security.access_token_required)])
 async def get_users(
         users_service: Annotated[UsersService, Depends(get_users_service)],
-        current_user: Annotated[UserReadSchema, Depends(get_authorized_user)],
+        current_user: Annotated[UserReadSchema, Depends(check_role([UserRole.ADMIN]))],
 ) -> List[UserReadSchema]:
     users = await users_service.get_users()
     return users
