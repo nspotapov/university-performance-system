@@ -26,7 +26,7 @@ def get_mail_service():
     return MailService()
 
 
-async def get_authenticated_user(
+async def get_authorized_user(
         users_service: Annotated[UsersService, Depends(get_users_service)],
         access_token_payload: TokenPayload = Depends(jwt_security.access_token_required),
 ):

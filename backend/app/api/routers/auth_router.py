@@ -7,13 +7,14 @@ from fastapi import APIRouter, Depends, HTTPException, status, Response
 
 import app.config
 from app.api.dependencies import get_users_service, get_auth_service, get_otp_service, get_mail_service, \
-    get_authenticated_user
+    get_authorized_user
 from app.common import text_messages
 from app.common.func import mask_email
 from app.common.security import jwt_security
 from app.schemas.auth_schemas import AuthLoginRequestSchema, AuthOTPVerifyRequestSchema, \
     Auth2FAOTPCodeSendResponseSchema, \
-    AuthLoginResponseSchema, Auth2FAOTPCodeVerifyResponseSchema
+    AuthLoginResponseSchema, Auth2FAOTPCodeVerifyResponseSchema, Auth2FAOTPCodeSendRequestSchema
+from app.schemas.base_schemas import BaseRequestSchema
 from app.schemas.user_schemas import UserReadSchema
 from app.services import UsersService, AuthService, OTPService, MailService
 
@@ -37,17 +38,18 @@ async def login_user(
 
     token = jwt_security.create_access_token(uid=str(user.id),
                                              data={app.config.jwt_token_payload_2fa_required_key: True},
-                                             expiry=datetime.timedelta(seconds=app.config.otp_code_expired_time + 60))
+                                             expiry=datetime.timedelta(seconds=app.config.otp_code_expired_time * 2))
 
-    response.set_cookie(jwt_security.config.JWT_ACCESS_COOKIE_NAME, token)
+    jwt_security.set_access_cookies(token, response)
 
-    resp_schema = AuthLoginResponseSchema(token=token)
+    resp_schema = AuthLoginResponseSchema(access_token=token, token_type="bearer")
 
     return resp_schema
 
 
 @router.post("/2fa/otp/send")
 async def send_2fa_otp_code(
+        request_schema: Auth2FAOTPCodeSendRequestSchema,
         users_service: Annotated[UsersService, Depends(get_users_service)],
         otp_service: Annotated[OTPService, Depends(get_otp_service)],
         mail_service: Annotated[MailService, Depends(get_mail_service)],
@@ -65,8 +67,9 @@ async def send_2fa_otp_code(
     otp_expired_time = datetime.datetime.now() + datetime.timedelta(seconds=app.config.otp_code_expired_time)
     otp_expired_time_str = otp_expired_time.strftime("%H:%M:%S %d.%m.%Y")
 
-    msg_text = text_messages.YOUR_OTP_CODE.format(otp.code) + \
-               + text_messages.OTP_CODE_EXPIRE_TIME.format(otp_expired_time_str)
+    msg_text = (text_messages.YOUR_OTP_CODE.format(otp.code) + "\n" +
+                text_messages.OTP_CODE_EXPIRE_TIME.format(otp_expired_time_str))
+
     msg_subject = text_messages.HEADER_SIGNIN_VERIFY
 
     asyncio.create_task(mail_service.send_mail(user.email, msg_subject, msg_text))
@@ -79,7 +82,7 @@ async def send_2fa_otp_code(
 
 @router.post("/2fa/otp/verify")
 async def verify_2fa_otp_code(
-        schema: AuthOTPVerifyRequestSchema,
+        request_schema: AuthOTPVerifyRequestSchema,
         otp_service: Annotated[OTPService, Depends(get_otp_service)],
         users_service: Annotated[UsersService, Depends(get_users_service)],
         response: Response,
@@ -93,7 +96,7 @@ async def verify_2fa_otp_code(
     user = await users_service.get_user(access_token_payload.sub)
 
     is_verified = await otp_service.verify_otp_code(
-        user.id, schema.otp_code, delete_code=True
+        user.id, request_schema.otp_code, delete_code=True
     )
 
     if not is_verified:
@@ -101,18 +104,16 @@ async def verify_2fa_otp_code(
 
     token = jwt_security.create_access_token(uid=str(user.id))
 
-    response.set_cookie(jwt_security.config.JWT_ACCESS_COOKIE_NAME, token)
+    jwt_security.set_access_cookies(token, response)
 
-    resp_schema = Auth2FAOTPCodeVerifyResponseSchema(token=token)
+    resp_schema = Auth2FAOTPCodeVerifyResponseSchema(access_token=token, token_type="bearer")
 
     return resp_schema
 
 
 @router.post("/logout")
 async def logout_user(response: Response):
-    response.delete_cookie(jwt_security.config.JWT_ACCESS_COOKIE_NAME)
+    jwt_security.unset_cookies(response)
 
 
-@router.get("/current-user")
-async def get_current_user(user: Annotated[UserReadSchema, Depends(get_authenticated_user)]) -> UserReadSchema:
-    return user
+

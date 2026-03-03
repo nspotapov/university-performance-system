@@ -1,6 +1,6 @@
 from typing import Type
 
-from app.common.security import get_password_hash, verify_password
+from app.common.security import verify_password
 from app.repositories import SQLAlchemyRepository
 from app.schemas.auth_schemas import AuthLoginRequestSchema
 from app.schemas.user_schemas import UserReadSchema
@@ -11,14 +11,14 @@ class AuthService:
         self.users_repo: SQLAlchemyRepository = users_repo()
 
     async def login_user(self, schema: AuthLoginRequestSchema) -> UserReadSchema | None:
-        users = await self.users_repo.find_all(email=schema.email)
+        users = await self.users_repo.find_all(email=schema.username)
 
         if len(users) == 0:
             return None
 
         user = users[0]
 
-        if not verify_password(schema.password, user.hashed_password):
-            return None
+        if verify_password(schema.password, user.hashed_password):
+            return user
 
-        return user
+        return None

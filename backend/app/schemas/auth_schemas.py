@@ -1,23 +1,33 @@
 import datetime
 
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel
+
+from app.schemas.base_schemas import BaseResponseSchema, BaseRequestWithAccessTokenSchema
 
 
 class AuthLoginRequestSchema(BaseModel):
-    email: EmailStr
+    username: str
     password: str
 
 
-class AuthLoginResponseSchema(BaseModel):
-    token: str
+class AuthLoginResponseSchema(BaseResponseSchema):
+    access_token: str
+    token_type: str
 
 
-class AuthOTPVerifyRequestSchema(BaseModel):
+class AuthOTPVerifyRequestSchema(BaseRequestWithAccessTokenSchema):
     otp_code: str
 
-class Auth2FAOTPCodeVerifyResponseSchema(BaseModel):
-    token: str
 
-class Auth2FAOTPCodeSendResponseSchema(BaseModel):
+class Auth2FAOTPCodeSendRequestSchema(BaseRequestWithAccessTokenSchema):
+    pass
+
+
+class Auth2FAOTPCodeVerifyResponseSchema(BaseResponseSchema):
+    access_token: str
+    token_type: str
+
+
+class Auth2FAOTPCodeSendResponseSchema(BaseResponseSchema):
     otp_code_exp_time: datetime.datetime
     otp_code_send_email: str

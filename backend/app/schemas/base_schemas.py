@@ -18,3 +18,14 @@ class BaseReadSchema(BaseSchema):
 
 class BaseUpdateSchema(BaseSchema):
     pass
+
+
+class BaseRequestSchema(BaseModel):
+    pass
+
+
+class BaseResponseSchema(BaseModel):
+    pass
+
+class BaseRequestWithAccessTokenSchema(BaseRequestSchema):
+    access_token: str | None
