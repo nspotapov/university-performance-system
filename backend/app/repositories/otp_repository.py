@@ -16,13 +16,13 @@ class OTPRepository:
             decode_responses=True,
         )
 
-    async def add_one(self, user_id: int, code: str) -> OTPReadSchema:
-        key = ":".join(["user", str(user_id), "otp_code", str(uuid.uuid4())])
+    async def add_one(self, user_id: str, code: str) -> OTPReadSchema:
+        key = ":".join(["user", user_id, "otp_code", str(uuid.uuid4())])
         await self._redis.setex(key, app.config.otp_code_expired_time, code)
         return OTPReadSchema(id=key, user_id=user_id, code=code)
 
-    async def find_all(self, user_id: int) -> list[OTPReadSchema]:
-        key = ":".join(["user", str(user_id), "otp_code", "*"])
+    async def find_all(self, user_id: str) -> list[OTPReadSchema]:
+        key = ":".join(["user", user_id, "otp_code", "*"])
 
         otp_codes = []
 

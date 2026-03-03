@@ -10,13 +10,13 @@ class AbstractRepository(ABC):
     async def get_all(self):
         raise NotImplementedError
 
-    async def edit_one(self, id: int, data: dict[str, Any]):
+    async def edit_one(self, pk: str, data: dict[str, Any]):
         raise NotImplementedError
 
-    async def get_one(self, id: int):
+    async def get_one(self, pk: str):
         raise NotImplementedError
 
-    async def delete_one(self, id: int):
+    async def delete_one(self, pk: str):
         raise NotImplementedError
 
     async def find_all(self, **filter_by):
