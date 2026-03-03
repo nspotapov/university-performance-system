@@ -1,15 +1,8 @@
 import os
 
-import dotenv
-
-BASE_DIR: str = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-
-if os.path.exists(os.path.join(BASE_DIR, ".env")):
-    dotenv.load_dotenv(os.path.join(BASE_DIR, ".env"))
-
 debug = bool(os.getenv("DEBUG"))
 
-database_driver = os.getenv("DATABASE_DRIVER")
+database_driver = "mysql+aiomysql"
 database_host = os.getenv("DATABASE_HOST")
 database_port = os.getenv("DATABASE_PORT")
 database_name = os.getenv("DATABASE_NAME")
@@ -31,15 +24,21 @@ smtp_username = os.getenv("SMTP_USERNAME")
 smtp_from = os.getenv("SMTP_FROM")
 smtp_password = os.getenv("SMTP_PASSWORD")
 
-otp_code_expired_time = int(os.getenv("OTP_CODE_EXPIRED_TIME", "300"))
-otp_code_mockup = os.getenv("OTP_CODE_MOCKUP", None)
+otp_code_expired_time = int(os.getenv("OTP_CODE_EXPIRED_TIME"))
 
 redis_host = os.getenv("REDIS_HOST")
-redis_port = int(os.getenv("REDIS_PORT", "6379"))
+redis_port = int(os.getenv("REDIS_PORT"))
 redis_username = os.getenv("REDIS_USERNAME")
 redis_password = os.getenv("REDIS_PASSWORD")
 redis_db = int(os.getenv("REDIS_DB", "0"))
 
-jwt_algorithm = os.getenv("JWT_ALGORITHM", "HS256")
+jwt_token_payload_mfa_required_key = "mfa_required"
+
+jwt_algorithm = os.getenv("JWT_ALGORITHM")
 jwt_secret_key = os.getenv("JWT_SECRET_KEY")
-jwt_token_location = ["headers", "cookies", "query"]
+jwt_token_location = ["headers", "cookies", "query", "json"]
+jwt_json_key = "access_token"
+jwt_refresh_json_key = "refresh_token"
+jwt_cookie_secure = False if debug else True
+jwt_header_name = "Authorization"
+jwt_header_type = "Bearer"

@@ -1,3 +1,5 @@
+from typing import Optional
+
 from pydantic import BaseModel
 
 
@@ -10,7 +12,7 @@ class BaseCreateSchema(BaseSchema):
 
 
 class BaseReadSchema(BaseSchema):
-    id: int
+    id: str
 
     class Config:
         from_attributes = True
@@ -18,3 +20,14 @@ class BaseReadSchema(BaseSchema):
 
 class BaseUpdateSchema(BaseSchema):
     pass
+
+
+class BaseRequestSchema(BaseModel):
+    pass
+
+
+class BaseResponseSchema(BaseModel):
+    pass
+
+class BaseRequestWithAccessTokenSchema(BaseRequestSchema):
+    access_token: Optional[str] = None
