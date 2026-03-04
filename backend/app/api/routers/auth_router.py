@@ -122,3 +122,52 @@ async def get_current_user_mfa_method(
 @router.post("/logout")
 async def logout_user(response: Response):
     jwt_security.unset_cookies(response)
+
+
+# TODO: Реализовать TOTP MFA
+# @router.post("/2fa/setup", response_model=TOTPSetup)
+# async def setup_2fa(temp_token: str, db: AsyncSession = Depends(get_db)):
+#     """Этап 1: Генерация секрета и QR-кода для нового пользователя (или сброс)"""
+#     user = await get_user_from_temp_token(temp_token, db)
+#
+#     # Генерируем новый секрет, если он еще не подтвержден
+#     if not user.totp_secret:
+#         user.totp_secret = security.generate_totp_secret()
+#         await db.commit()
+#
+#     qr_uri = security.get_totp_uri(user.totp_secret, user.email)
+#     return {"secret": user.totp_secret, "qr_uri": qr_uri}
+#
+#
+# @router.post("/2fa/enable", response_model=LoginResponse)
+# async def enable_2fa(data: TOTPVerify, db: AsyncSession = Depends(get_db)):
+#     """Этап 2: Подтверждение кода и окончательная активация 2FA"""
+#     user = await get_user_from_temp_token(data.temp_token, db)
+#
+#     if not user.totp_secret:
+#         raise HTTPException(status_code=400, detail="2FA not initialized. Call /setup first.")
+#
+#     if not security.verify_totp_code(user.totp_secret, data.code):
+#         raise HTTPException(status_code=400, detail="Invalid verification code")
+#
+#     user.is_2fa_enabled = True
+#     await db.commit()
+#
+#     # Теперь выдаем полноценный токен
+#     access_token = security.create_access_token(user.id)
+#     return LoginResponse(access_token=access_token)
+#
+#
+# @router.post("/2fa/verify", response_model=LoginResponse)
+# async def verify_2fa(data: TOTPVerify, db: AsyncSession = Depends(get_db)):
+#     """Вход для пользователей, у которых 2FA уже активирован"""
+#     user = await get_user_from_temp_token(data.temp_token, db)
+#
+#     if not user.is_2fa_enabled:
+#         raise HTTPException(status_code=400, detail="2FA is not enabled for this user")
+#
+#     if not security.verify_totp_code(user.totp_secret, data.code):
+#         raise HTTPException(status_code=400, detail="Invalid TOTP code")
+#
+#     access_token = security.create_access_token(user.id)
+#     return LoginResponse(access_token=access_token)
