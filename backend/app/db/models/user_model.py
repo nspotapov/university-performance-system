@@ -4,11 +4,11 @@ from sqlalchemy import String, Enum, Boolean
 from sqlalchemy.orm import mapped_column, Mapped
 
 from app.schemas.user_schemas import UserReadSchema
-from .base_model import DBModel
+from .base_model import BaseDbModelWithId
 from ..enums import UserRole, MFAMethod, OTPTarget
 
 
-class User(DBModel):
+class User(BaseDbModelWithId):
     __tablename__ = "users"
 
     name: Mapped[str] = mapped_column(String(64), nullable=False)

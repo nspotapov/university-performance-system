@@ -7,7 +7,11 @@ from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 from app.schemas.base_schemas import BaseReadSchema
 
 
-class DBModel(DeclarativeBase):
+class BaseDbModel(DeclarativeBase):
+    __abstract__ = True
+
+
+class BaseDbModelWithId(DeclarativeBase):
     __abstract__ = True
 
     id: Mapped[str] = mapped_column(
