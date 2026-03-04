@@ -5,7 +5,7 @@ from sqlalchemy.orm import mapped_column, Mapped
 
 from app.schemas.user_schemas import UserReadSchema
 from .base_model import BaseDbModelWithId
-from ..enums import UserRole, MFAMethod, OTPTarget
+from app.db.enums import UserRole, MFAMethod, OTPTarget
 
 
 class User(BaseDbModelWithId):

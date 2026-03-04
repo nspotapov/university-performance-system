@@ -1,5 +1,5 @@
-from enum import Enum
+from enum import StrEnum
 
 
-class OTPTarget(str, Enum):
+class OTPTarget(StrEnum):
     EMAIL = "EMAIL"

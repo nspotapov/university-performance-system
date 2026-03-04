@@ -1,7 +1,7 @@
-from enum import Enum
+from enum import StrEnum
 
 
-class GradeValue(str, Enum):
+class GradeValue(StrEnum):
     # Экзаменационные оценки
     EXCELLENT = "5"
     GOOD = "4"

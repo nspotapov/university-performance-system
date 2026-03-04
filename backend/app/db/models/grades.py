@@ -1,5 +1,7 @@
-from sqlalchemy import Column, Integer, ForeignKey, Enum, DateTime, Boolean, CheckConstraint
-from sqlalchemy.orm import relationship
+import datetime
+
+from sqlalchemy import mapped_column, Integer, ForeignKey, Enum, DateTime, Boolean, CheckConstraint, String
+from sqlalchemy.orm import relationship, Mapped, mapped_column
 from sqlalchemy.sql import func
 
 from app.db.enums import GradeValue
@@ -11,18 +13,18 @@ class GradeSheet(BaseDbModelWithId):
     __tablename__ = "grade_sheets"
 
     # Связь с предметом из учебного плана (оттуда берем семестр и тип контроля)
-    curriculum_item_id = Column(Integer, ForeignKey("curriculum_items.id"), nullable=False)
+    curriculum_item_id: Mapped[str] = mapped_column(String(36), ForeignKey("curriculum_items.id"), nullable=False)
 
     # Для какой группы эта ведомость
-    group_id = Column(Integer, ForeignKey("groups.id"), nullable=False)
+    group_id: Mapped[str] = mapped_column(String(36), ForeignKey("groups.id"), nullable=False)
 
     # Кто принимает (преподаватель)
-    teacher_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    teacher_id: Mapped[str] = mapped_column(String(36), ForeignKey("users.id"), nullable=False)
 
     # Метаданные
-    is_closed = Column(Boolean, default=False)  # Если True, оценки менять нельзя
-    created_at = Column(DateTime(timezone=True), server_default=func.now())
-    closed_at = Column(DateTime(timezone=True), nullable=True)
+    is_closed: Mapped[bool] = mapped_column(Boolean, default=False)  # Если True, оценки менять нельзя
+    created_at: Mapped[datetime.datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    closed_at: Mapped[datetime.datetime] = mapped_column(DateTime(timezone=True), nullable=True)
 
     # Relationships
     curriculum_item = relationship("CurriculumItem")
@@ -35,15 +37,15 @@ class Grade(BaseDbModelWithId):
     """Конкретная оценка студента в ведомости"""
     __tablename__ = "grades"
 
-    sheet_id = Column(Integer, ForeignKey("grade_sheets.id"), nullable=False)
-    student_id = Column(Integer, ForeignKey("users.id"), nullable=False)  # FK на User (роль Student)
+    sheet_id: Mapped[str] = mapped_column(String(36), ForeignKey("grade_sheets.id"), nullable=False)
+    student_id: Mapped[str] = mapped_column(String(36), ForeignKey("users.id"), nullable=False)  # FK на User (роль Student)
 
-    value = Column(Enum(GradeValue), nullable=False)
+    value: Mapped[GradeValue] = mapped_column(Enum(GradeValue), nullable=False)
 
     # Для расчета среднего балла и аналитики (например: 5, 4, 3, 2, или 1/0 для зачетов)
-    numeric_value = Column(Integer, nullable=True)
+    numeric_value: Mapped[int] = mapped_column(Integer, nullable=True)
 
-    updated_at = Column(DateTime(timezone=True), onupdate=func.now())
+    updated_at: Mapped[datetime.datetime] = mapped_column(DateTime(timezone=True), onupdate=func.now())
 
     sheet = relationship("GradeSheet", back_populates="grades")
     student = relationship("User")

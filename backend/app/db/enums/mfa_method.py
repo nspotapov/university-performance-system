@@ -1,6 +1,6 @@
-from enum import Enum
+from enum import StrEnum
 
 
-class MFAMethod(str, Enum):
+class MFAMethod(StrEnum):
     TOTP = "TOTP"
     OTP = "OTP"

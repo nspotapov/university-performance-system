@@ -8,14 +8,14 @@ from app.schemas.base_schemas import BaseReadSchema
 
 
 class BaseDbModel(DeclarativeBase):
-    __abstract__ = True
+    pass
 
 
 class BaseDbModelWithId(DeclarativeBase):
     __abstract__ = True
 
     id: Mapped[str] = mapped_column(
-        String(256),
+        String(36),
         primary_key=True,
         index=True,
         insert_default=str(uuid.uuid4())

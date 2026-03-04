@@ -1,7 +1,7 @@
-from enum import Enum
+from enum import StrEnum
 
 
-class ControlType(str, Enum):
+class ControlType(StrEnum):
     EXAM = "EXAM"  # Экзамен
     CREDIT = "CREDIT"  # Зачет
     GRADED_CREDIT = "GRADED"  # Дифференцированный зачет

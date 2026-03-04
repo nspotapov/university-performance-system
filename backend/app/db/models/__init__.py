@@ -1,7 +1,7 @@
 from .user_model import User
 from .base_model import BaseDbModel, BaseDbModelWithId
 from .otp_model import OTP
-from .university import Faculty, Department, Direction, Subject, Curriculum, CurriculumItem
+from .university import Faculty, Department, Direction, Subject, Curriculum, CurriculumItem, teacher_subjects
 from .academic import StudentProfile, Group
 
 __all__ = [
@@ -17,4 +17,5 @@ __all__ = [
     "CurriculumItem",
     "StudentProfile",
     "Group",
+    "teacher_subjects",
 ]
