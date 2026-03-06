@@ -1,0 +1,5 @@
+ERROR_INVALID_CREDENTIALS = "Неверные данные для входа"
+ERROR_TOTP_DISABLED_FOR_THIS_USER = "TOTP аутентификация отключена для данного пользователя"
+ERROR_MFA_DISABLED_FOR_THIS_USER = "Многофакторная аутентификация отключена для данного пользователя"
+ERROR_INVALID_TOTP_CODE = "Неверный TOTP код"
+ERROR_USER_INACTIVE = "Пользователь заблокирован"
