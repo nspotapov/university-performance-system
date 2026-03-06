@@ -12,8 +12,10 @@ from app.models import User
 from app.services import AuthService, UserService
 from .schemas import (
     ApiV1LoginUserRequestSchema,
-    ApiV1LoginUserResponseSchema, ApiV1VerifyMfaTotpCodeResponseSchema, ApiV1VerifyMfaTotpCodeRequestSchema,
-    ApiV1GetCurrentUserMfaMethodResponseSchema
+    ApiV1LoginUserResponseSchema,
+    ApiV1VerifyMfaTotpCodeResponseSchema,
+    ApiV1VerifyMfaTotpCodeRequestSchema,
+    ApiV1GetCurrentUserMfaMethodResponseSchema,
 )
 
 router = APIRouter(
@@ -26,7 +28,7 @@ async def get_user_with_mfa_access_token(
         access_token_payload: Annotated[TokenPayload, Depends(mfa_jwt_security.access_token_required)],
         user_service: Annotated[UserService, Depends(get_user_service)],
 ) -> User:
-    return await user_service.get_user_by_id(str(access_token_payload.sub))
+    return await user_service.get_user_by_id(int(access_token_payload.sub))
 
 
 @router.post(

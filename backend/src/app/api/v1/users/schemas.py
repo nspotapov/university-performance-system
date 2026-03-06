@@ -1,12 +1,10 @@
-import uuid
-
 from pydantic import BaseModel, EmailStr
 
 from app.models.user import UserRole
 
 
 class ApiV1ReadUserResponseSchema(BaseModel):
-    id: uuid.UUID
+    id: int
     email: EmailStr
     role: UserRole
     is_active: bool
