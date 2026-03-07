@@ -1,44 +1,56 @@
-from typing import List, Type, Optional
+from typing import List, Optional, Generic, TypeVar, Type, Tuple
 
-from app.core.types import Id
-from sqlalchemy import insert, select, update, delete
+from sqlalchemy import insert, select, update, delete, func
+from sqlalchemy.ext.asyncio import AsyncSession
+
+T = TypeVar("T")
 
 
-class SQLAlchemyRepository:
-    model = None
+class SQLAlchemyRepository(Generic[T]):
+    model: Type[T] = None
 
-    def __init__(self, db_session):
-        self.__db_session = db_session
+    def __init__(self, db_session: AsyncSession):
+        self._session = db_session
 
-    async def create(self, data: dict) -> Type[model]:
-        stmt = insert(self.model).values(**data)
-        result = await self.__db_session.execute(stmt)
-        await self.__db_session.commit()
-        pk = result.lastrowid
-        item = await self.read(pk)
-        return item
+    async def create(self, data: dict) -> T:
+        # Сразу возвращаем созданный объект
+        stmt = insert(self.model).values(**data).returning(self.model)
+        result = await self._session.execute(stmt)
+        return result.scalar_one()
 
-    async def update(self, pk: int, data: dict) -> Optional[Type[model]]:
-        stmt = update(self.model).values(**data).filter_by(id=pk)
-        await self.__db_session.execute(stmt)
-        await self.__db_session.commit()
-        item = await self.read(pk)
-        return item
+    async def update(self, pk: int, data: dict) -> Optional[T]:
+        stmt = (
+            update(self.model)
+            .filter_by(id=pk)
+            .values(**data)
+            .returning(self.model)
+        )
+        result = await self._session.execute(stmt)
+        return result.scalar_one_or_none()
 
-    async def delete(self, pk: int) -> Optional[Type[model]]:
-        item = await self.read(pk)
-        stmt = delete(self.model).filter_by(id=pk)
-        await self.__db_session.execute(stmt)
-        await self.__db_session.commit()
-        return item
+    async def delete(self, pk: int) -> Optional[T]:
+        stmt = delete(self.model).filter_by(id=pk).returning(self.model)
+        result = await self._session.execute(stmt)
+        return result.scalar_one_or_none()
 
-    async def find_all(self, offset: int = 0, limit: int = 25, **filter_by) -> List[Type[model]]:
-        stmt = select(self.model).filter_by(**filter_by).offset(offset).limit(limit)
-        result = await self.__db_session.execute(stmt)
-        items = list(result.scalars().all())
-        return items
+    async def read(self, pk: int) -> Optional[T]:
+        stmt = select(self.model).filter_by(id=pk)
+        result = await self._session.execute(stmt)
+        return result.scalar_one_or_none()
 
-    async def read(self, pk: int) -> Optional[Type[model]]:
-        items = await self.find_all(id=pk)
-        if items:
-            return items.pop()
+    async def find_all(self, size: int = 50, page: int = 1, **filter_by) -> Tuple[List[T], int]:
+        stmt = (
+            select(self.model)
+            .filter_by(**filter_by)
+            .offset((page - 1) * size)
+            .limit(size)
+        )
+        result = await self._session.execute(stmt)
+        items = list(result.scalars())
+        total = await self.count(**filter_by)
+        return items, total
+
+    async def count(self, **filter_by) -> int:
+        stmt = select(func.count()).select_from(self.model).filter_by(**filter_by)
+        result = await self._session.execute(stmt)
+        return result.scalar() or 0

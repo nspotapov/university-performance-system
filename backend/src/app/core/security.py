@@ -36,7 +36,7 @@ def get_totp_uri(secret: str, email: str) -> str:
 
 jwt_config = AuthXConfig(
     JWT_SECRET_KEY=settings.JWT_SECRET_KEY,
-    JWT_TOKEN_LOCATION=settings.JWT_TOKEN_LOCATION,
+    JWT_ACCESS_TOKEN_EXPIRES=settings.JWT_ACCESS_TOKEN_EXPIRES,
     JWT_COOKIE_SECURE=settings.JWT_COOKIE_SECURE,
     JWT_COOKIE_HTTP_ONLY=settings.JWT_COOKIE_HTTP_ONLY,
     JWT_COOKIE_CSRF_PROTECT=settings.JWT_COOKIE_CSRF_PROTECT,
@@ -46,7 +46,6 @@ jwt_security = AuthX(config=jwt_config)
 
 mfa_jwt_config = AuthXConfig(
     JWT_SECRET_KEY=settings.MFA_JWT_SECRET_KEY,
-    JWT_TOKEN_LOCATION=settings.JWT_TOKEN_LOCATION,
     JWT_COOKIE_SECURE=settings.JWT_COOKIE_SECURE,
     JWT_COOKIE_HTTP_ONLY=settings.JWT_COOKIE_HTTP_ONLY,
     JWT_COOKIE_CSRF_PROTECT=settings.JWT_COOKIE_CSRF_PROTECT,

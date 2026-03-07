@@ -1,22 +1,21 @@
 import datetime
 from typing import Annotated
 
-from authx import TokenPayload
-from fastapi import APIRouter, Response, Depends, HTTPException, status
+from fastapi import APIRouter, Response, Depends, HTTPException, status, Request
 
-from app.api.dependencies import get_auth_service, get_user_service
+from app.api.v1.dependencies import get_auth_service, get_user_service, get_current_user
 from app.core import messages
 from app.core.config import settings
 from app.core.security import jwt_security, mfa_jwt_security
-from app.models import User
 from app.services import AuthService, UserService
 from .schemas import (
     ApiV1LoginUserRequestSchema,
     ApiV1LoginUserResponseSchema,
     ApiV1VerifyMfaTotpCodeResponseSchema,
     ApiV1VerifyMfaTotpCodeRequestSchema,
-    ApiV1GetCurrentUserMfaMethodResponseSchema,
+    ApiV1GetCurrentUserMfaMethodResponseSchema, AccessTokenResponse,
 )
+from ..users.schemas import UserReadResponseSchema
 
 router = APIRouter(
     prefix="/auth",
@@ -24,44 +23,27 @@ router = APIRouter(
 )
 
 
-async def get_user_with_mfa_access_token(
-        access_token_payload: Annotated[TokenPayload, Depends(mfa_jwt_security.access_token_required)],
+async def get_current_user_with_mfa_access_token(
+        request: Request,
         user_service: Annotated[UserService, Depends(get_user_service)],
-) -> User:
-    return await user_service.get_user_by_id(int(access_token_payload.sub))
+) -> UserReadResponseSchema:
+    # Get access token from HEADERS only (not cookies)
+    access_token = await mfa_jwt_security.get_access_token_from_request(
+        request,
+        locations=["headers"],  # Only look in headers
+    )
+    # Verify the access token
+    # No CSRF verification needed for header-based tokens
+    access_token_payload = mfa_jwt_security.verify_token(access_token, verify_csrf=False)
+    return await user_service.get_user(int(access_token_payload.sub))
 
 
-@router.post(
-    "/logout",
-    responses={
-        200: {
-            "description": "User logout successful"
-        }
-    }
-)
+@router.post("/logout")
 async def logout_user(response: Response):
     jwt_security.unset_refresh_cookies(response)
 
 
-@router.post(
-    "/login",
-    responses={
-        200: {
-            "description": "Credentials valid and MFA disabled",
-            "model": ApiV1LoginUserResponseSchema
-        },
-        202: {
-            "description": "Credentials valid and MFA required",
-            "model": ApiV1LoginUserResponseSchema
-        },
-        400: {
-            "description": "Credentials valid but user inactive",
-        },
-        401: {
-            "description": "Invalid credentials",
-        },
-    }
-)
+@router.post("/login")
 async def login_user(
         request_schema: ApiV1LoginUserRequestSchema,
         auth_service: Annotated[AuthService, Depends(get_auth_service)],
@@ -69,7 +51,7 @@ async def login_user(
 ) -> ApiV1LoginUserResponseSchema:
     user = await auth_service.login_user(request_schema.username, request_schema.password)
     if not user:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail=messages.ERROR_INVALID_CREDENTIALS)
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=messages.ERROR_INVALID_CREDENTIALS)
     is_active = await auth_service.check_user_is_active(user)
     if not is_active:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=messages.ERROR_USER_INACTIVE)
@@ -79,7 +61,6 @@ async def login_user(
             uid=str(user.id),
             expiry=datetime.timedelta(minutes=settings.MFA_JWT_EXPIRE_MINUTES)
         )
-        response.status_code = 202
     else:
         access_token = jwt_security.create_access_token(uid=str(user.id))
         refresh_token = jwt_security.create_refresh_token(uid=str(user.id))
@@ -88,20 +69,28 @@ async def login_user(
     return response_schema
 
 
-@router.get(
-    "/mfa/method",
-    responses={
-        200: {
-            "description": "MFA enabled",
-            "model": ApiV1GetCurrentUserMfaMethodResponseSchema
-        },
-        400: {
-            "description": "MFA disabled for this user"
-        }
-    }
-)
+@router.post("/refresh")
+async def refresh_jwt_access_token(request: Request) -> AccessTokenResponse:
+    # Get refresh token from COOKIES only (not headers)
+    # The locations parameter restricts where to look for the token
+    refresh_token = await jwt_security.get_refresh_token_from_request(
+        request,
+        locations=["cookies"],  # Only look in cookies
+    )
+
+    # Verify the refresh token (CSRF is verified automatically for cookies)
+    payload = jwt_security.verify_token(refresh_token, verify_type=True)
+
+    # Create a new access token
+    new_access_token = jwt_security.create_access_token(uid=payload.sub)
+
+    # Return in response body (client stores in memory)
+    return AccessTokenResponse(access_token=new_access_token)
+
+
+@router.get("/mfa/method")
 async def get_user_mfa_method(
-        current_user: Annotated[User, Depends(get_user_with_mfa_access_token)],
+        current_user: Annotated[UserReadResponseSchema, Depends(get_current_user_with_mfa_access_token)],
         auth_service: Annotated[AuthService, Depends(get_auth_service)],
 ) -> ApiV1GetCurrentUserMfaMethodResponseSchema:
     is_mfa_enabled = await auth_service.check_mfa_enabled(current_user)
@@ -112,25 +101,11 @@ async def get_user_mfa_method(
     return response_schema
 
 
-@router.post(
-    "/mfa/totp/verify",
-    responses={
-        200: {
-            "description": "TOTP code valid",
-            "model": ApiV1VerifyMfaTotpCodeResponseSchema
-        },
-        400: {
-            "description": "TOTP disabled for this user",
-        },
-        401: {
-            "description": "TOTP code invalid"
-        }
-    }
-)
+@router.post("/mfa/totp/verify")
 async def verify_mfa_totp_code(
         request_schema: ApiV1VerifyMfaTotpCodeRequestSchema,
         auth_service: Annotated[AuthService, Depends(get_auth_service)],
-        current_user: Annotated[User, Depends(get_user_with_mfa_access_token)],
+        current_user: Annotated[UserReadResponseSchema, Depends(get_current_user_with_mfa_access_token)],
         response: Response
 ) -> ApiV1VerifyMfaTotpCodeResponseSchema:
     is_totp_enabled = await auth_service.check_totp_enabled(current_user)
@@ -138,9 +113,16 @@ async def verify_mfa_totp_code(
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=messages.ERROR_TOTP_DISABLED_FOR_THIS_USER)
     is_totp_code_verified = await auth_service.verify_totp_code(current_user, request_schema.code)
     if not is_totp_code_verified:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail=messages.ERROR_INVALID_TOTP_CODE)
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=messages.ERROR_INVALID_TOTP_CODE)
     access_token = jwt_security.create_access_token(uid=str(current_user.id))
     refresh_token = jwt_security.create_refresh_token(uid=str(current_user.id))
     jwt_security.set_refresh_cookies(refresh_token, response)
     response_schema = ApiV1VerifyMfaTotpCodeResponseSchema(access_token=access_token)
     return response_schema
+
+
+@router.get("/current-user")
+async def get_current_user(
+        current_user: Annotated[UserReadResponseSchema, Depends(get_current_user)],
+) -> UserReadResponseSchema:
+    return current_user

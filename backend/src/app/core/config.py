@@ -1,3 +1,4 @@
+import datetime
 import secrets
 
 from pydantic import computed_field
@@ -32,7 +33,13 @@ class Settings(BaseSettings):
         )
 
     JWT_SECRET_KEY: str = secrets.token_urlsafe(512)
-    JWT_TOKEN_LOCATION: list[str] = ["headers", "cookies"]
+    JWT_ACCESS_TOKEN_EXPIRES_MINUTE: int = 15
+
+    @computed_field
+    @property
+    def JWT_ACCESS_TOKEN_EXPIRES(self) -> datetime.timedelta:
+        return datetime.timedelta(minutes=self.JWT_ACCESS_TOKEN_EXPIRES_MINUTE)
+
     JWT_COOKIE_SECURE: bool = False if DEBUG else True
     JWT_COOKIE_HTTP_ONLY: bool = True
     JWT_COOKIE_CSRF_PROTECT: bool = True
@@ -46,6 +53,7 @@ class Settings(BaseSettings):
     SMTP_PASSWORD: str = "password"
     SMTP_FROM: str = "support@example.com"
     SMTP_TLS: bool = False
+
 
 settings = Settings()  # noqa
 

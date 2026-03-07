@@ -3,7 +3,7 @@ from pydantic import BaseModel, Field
 from app.models import MFAMethod
 
 
-class BaseResponseWithAccessToken(BaseModel):
+class AccessTokenResponse(BaseModel):
     access_token: str
     token_type: str = "bearer"
 
@@ -13,7 +13,7 @@ class ApiV1LoginUserRequestSchema(BaseModel):
     password: str
 
 
-class ApiV1LoginUserResponseSchema(BaseResponseWithAccessToken):
+class ApiV1LoginUserResponseSchema(AccessTokenResponse):
     mfa_required: bool
 
 
@@ -21,7 +21,7 @@ class ApiV1VerifyMfaTotpCodeRequestSchema(BaseModel):
     code: str = Field(min_length=6, max_length=6)
 
 
-class ApiV1VerifyMfaTotpCodeResponseSchema(BaseResponseWithAccessToken):
+class ApiV1VerifyMfaTotpCodeResponseSchema(AccessTokenResponse):
     pass
 
 

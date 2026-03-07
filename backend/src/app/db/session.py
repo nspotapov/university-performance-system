@@ -10,6 +10,7 @@ async def get_async_session():
     async with async_session_maker() as session:
         yield session
 
+
 __all__ = (
     "get_async_session"
 )
