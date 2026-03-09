@@ -34,18 +34,22 @@ class Settings(BaseSettings):
 
     JWT_SECRET_KEY: str = secrets.token_urlsafe(512)
     JWT_ACCESS_TOKEN_EXPIRES_MINUTE: int = 15
+    JWT_COOKIE_SECURE: bool = False
+    JWT_COOKIE_HTTP_ONLY: bool = True
+    JWT_COOKIE_CSRF_PROTECT: bool = False
+
+    MFA_JWT_ACCESS_TOKEN_EXPIRES_MINUTE: int = 5
+    MFA_JWT_SECRET_KEY: str = secrets.token_urlsafe(512)
+
+    @computed_field
+    @property
+    def MFA_JWT_ACCESS_TOKEN_EXPIRES(self) -> datetime.timedelta:
+        return datetime.timedelta(minutes=self.MFA_JWT_ACCESS_TOKEN_EXPIRES_MINUTE)
 
     @computed_field
     @property
     def JWT_ACCESS_TOKEN_EXPIRES(self) -> datetime.timedelta:
         return datetime.timedelta(minutes=self.JWT_ACCESS_TOKEN_EXPIRES_MINUTE)
-
-    JWT_COOKIE_SECURE: bool = False if DEBUG else True
-    JWT_COOKIE_HTTP_ONLY: bool = True
-    JWT_COOKIE_CSRF_PROTECT: bool = True
-
-    MFA_JWT_EXPIRE_MINUTES: int = 5
-    MFA_JWT_SECRET_KEY: str = secrets.token_urlsafe(512)
 
     SMTP_HOST: str = "mailhog"
     SMTP_PORT: int = "8025"

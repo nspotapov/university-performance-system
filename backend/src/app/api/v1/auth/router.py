@@ -1,11 +1,9 @@
-import datetime
 from typing import Annotated
 
 from fastapi import APIRouter, Response, Depends, HTTPException, status, Request
 
 from app.api.v1.dependencies import get_auth_service, get_user_service, get_current_user
 from app.core import messages
-from app.core.config import settings
 from app.core.security import jwt_security, mfa_jwt_security
 from app.services import AuthService, UserService
 from .schemas import (
@@ -57,10 +55,7 @@ async def login_user(
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=messages.ERROR_USER_INACTIVE)
     is_mfa_enabled = await auth_service.check_mfa_enabled(user)
     if is_mfa_enabled:
-        access_token = mfa_jwt_security.create_access_token(
-            uid=str(user.id),
-            expiry=datetime.timedelta(minutes=settings.MFA_JWT_EXPIRE_MINUTES)
-        )
+        access_token = mfa_jwt_security.create_access_token(uid=str(user.id))
     else:
         access_token = jwt_security.create_access_token(uid=str(user.id))
         refresh_token = jwt_security.create_refresh_token(uid=str(user.id))
