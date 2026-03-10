@@ -5,11 +5,21 @@ export default defineAppConfig({
       primary: 'emerald',
       neutral: 'slate',
     },
+    // Принудительно отключаем темную тему
+    darkMode: 'class',
+    strategy: 'class',
     button: {
       defaultVariants: {
-        // Set default button color to neutral
-        // color: 'neutral'
+        color: 'primary',
       },
+    },
+    input: {
+      defaultVariants: {
+        color: 'primary',
+      },
+    },
+    card: {
+      base: 'bg-white dark:bg-white',
     },
   },
 })

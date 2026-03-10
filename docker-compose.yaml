@@ -29,12 +29,12 @@ services:
       options:
         max-file: "1"
         max-size: "10m"
-    # healthcheck:
-    #   test: [ "CMD", "curl", "--fail", "http://127.0.0.1:8000/api/common/healthcheck" ]
-    #   interval: 5s
-    #   timeout: 10s
-    #   retries: 3
-    #   start_period: 5s
+    healthcheck:
+      test: ["CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/docs')"]
+      interval: 5s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
 
   frontend:
     build:
@@ -48,7 +48,7 @@ services:
     restart: unless-stopped
     logging: *logging-default
     healthcheck:
-      test: [ "CMD", "wget", "--spider", "-q", "http://127.0.0.1:3000/" ]
+      test: ["CMD", "wget", "--spider", "-q", "http://127.0.0.1:3000/"]
       interval: 5s
       timeout: 10s
       retries: 3
@@ -64,7 +64,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: [ "CMD", "pg_isready", "-U${POSTGRES_USER:-app}", "-d${POSTGRES_DB:-app}" ]
+      test: ["CMD", "pg_isready", "-U${POSTGRES_USER:-app}", "-d${POSTGRES_DB:-app}"]
       interval: 5s
       timeout: 10s
       retries: 3

@@ -1,6 +1,5 @@
 """
 Скрипт для наполнения БД тестовыми данными
-Запуск: python -m app.scripts.seed_data
 """
 import asyncio
 import sys
@@ -12,7 +11,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
 from app.core.config import settings
 from app.models import (
-    Base, User, UserRole, MFAMethod,
+    User, UserRole, MFAMethod,
     Faculty, Department, StudyDirection, Discipline, Curriculum,
     Course, Semester, StudyGroup,
     Student, Teacher, StudentGroup as StudentGroupLink,
@@ -27,11 +26,15 @@ async def seed():
     
     async with async_session_maker() as session:
         # Создаем пользователей
-        admin = User(email="admin@university.ru", hashed_password=get_password_hash("admin123"), role=UserRole.ADMIN, is_active=True, is_mfa_enabled=False, mfa_method=MFAMethod.OTP)
-        dean = User(email="dean@university.ru", hashed_password=get_password_hash("dean123"), role=UserRole.DEAN, is_active=True, is_mfa_enabled=False, mfa_method=MFAMethod.OTP)
-        head_teacher = User(email="head@university.ru", hashed_password=get_password_hash("head123"), role=UserRole.HEAD_TEACHER, is_active=True, is_mfa_enabled=False, mfa_method=MFAMethod.OTP)
-        teacher_user = User(email="teacher@university.ru", hashed_password=get_password_hash("teacher123"), role=UserRole.TEACHER, is_active=True, is_mfa_enabled=False, mfa_method=MFAMethod.OTP)
+        # ADMIN, RECTOR, DEAN, HEAD_TEACHER, TEACHER - с включенной OTP (обязательно для ролей)
+        admin = User(email="admin@university.ru", hashed_password=get_password_hash("admin123"), role=UserRole.ADMIN, is_active=True, is_mfa_enabled=True, mfa_method=MFAMethod.OTP)
+        dean = User(email="dean@university.ru", hashed_password=get_password_hash("dean123"), role=UserRole.DEAN, is_active=True, is_mfa_enabled=True, mfa_method=MFAMethod.OTP)
+        head_teacher = User(email="head@university.ru", hashed_password=get_password_hash("head123"), role=UserRole.HEAD_TEACHER, is_active=True, is_mfa_enabled=True, mfa_method=MFAMethod.OTP)
+        teacher_user = User(email="teacher@university.ru", hashed_password=get_password_hash("teacher123"), role=UserRole.TEACHER, is_active=True, is_mfa_enabled=True, mfa_method=MFAMethod.OTP)
+        
+        # STUDENT - без 2FA (опционально)
         student_user = User(email="student@university.ru", hashed_password=get_password_hash("student123"), role=UserRole.STUDENT, is_active=True, is_mfa_enabled=False, mfa_method=MFAMethod.OTP)
+        
         session.add_all([admin, dean, head_teacher, teacher_user, student_user])
         await session.flush()
         
@@ -109,11 +112,15 @@ async def seed():
         
         print("✓ Тестовые данные успешно добавлены!")
         print("\nУчетные данные для входа:")
-        print("  Admin:    admin@university.ru / admin123")
-        print("  Dean:     dean@university.ru / dean123")
-        print("  Head:     head@university.ru / head123")
-        print("  Teacher:  teacher@university.ru / teacher123")
-        print("  Student:  student@university.ru / student123")
+        print("  Admin:    admin@university.ru / admin123 (OTP включен)")
+        print("  Dean:     dean@university.ru / dean123 (OTP включен)")
+        print("  Head:     head@university.ru / head123 (OTP включен)")
+        print("  Teacher:  teacher@university.ru / teacher123 (OTP включен)")
+        print("  Student:  student@university.ru / student123 (2FA опционально)")
+        print("\nДля сотрудников с включенной OTP:")
+        print("  1. Войдите с email и паролем")
+        print("  2. Получите код на почту (Mailhog: http://localhost:8025)")
+        print("  3. Введите код для входа")
 
 
 if __name__ == "__main__":
