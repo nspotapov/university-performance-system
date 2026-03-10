@@ -26,8 +26,10 @@ class UserUpdateRequestSchema(UserBase):
 
 class UserReadResponseSchema(UserBase):
     id: int
+    # Дополнительные поля для MFA (не обязательные для ответа)
+    otp_code: Optional[str] = Field(default=None, exclude=True)
+    otp_expires_at: Optional[datetime] = Field(default=None, exclude=True)
     
     class Config:
         from_attributes = True
-        # Исключаем чувствительные поля
         extra = 'ignore'

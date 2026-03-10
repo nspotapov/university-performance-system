@@ -20,7 +20,12 @@ export default defineNuxtConfig({
   ],
   runtimeConfig: {
     public: {
-      baseApiUrl: '/api/v1',
+      baseApiUrl: '/api',
     },
+  },
+  // Отключаем темную тему
+  colorMode: {
+    preference: 'light',
+    fallback: 'light',
   },
 })
