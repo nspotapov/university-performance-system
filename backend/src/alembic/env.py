@@ -28,11 +28,11 @@ target_metadata = Base.metadata
 # ... etc.
 database_url = "{}://{}:{}@{}:{}/{}".format(
     "postgresql+psycopg",
-    os.getenv("POSTGRES_USER"),
-    os.getenv("POSTGRES_PASSWORD"),
-    os.getenv("POSTGRES_HOST"),
-    os.getenv("POSTGRES_PORT"),
-    os.getenv("POSTGRES_DB")
+    os.getenv("POSTGRES_USER", "app"),
+    os.getenv("POSTGRES_PASSWORD", "secret"),
+    os.getenv("POSTGRES_HOST", "localhost"),
+    os.getenv("POSTGRES_PORT", "5432"),
+    os.getenv("POSTGRES_DB", "app")
 )
 config.set_main_option("sqlalchemy.url", database_url)
 
