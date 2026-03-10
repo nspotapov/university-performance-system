@@ -1,12 +1,12 @@
 <template>
-  <header class="border-b border-gray-200 bg-white">
+  <header class="border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
     <div class="container mx-auto px-5">
       <div class="flex items-center justify-between h-16">
         <!-- Логотип и название -->
         <div class="flex items-center gap-4">
           <NuxtLink to="/" class="flex items-center gap-2">
             <UIcon name="i-heroicons-academic-cap" class="w-8 h-8 text-primary" />
-            <span class="font-bold text-lg hidden sm:block">Университет</span>
+            <span class="font-bold text-lg hidden sm:block text-gray-900 dark:text-white">Университет</span>
           </NuxtLink>
           
           <!-- Навигация -->
@@ -18,6 +18,7 @@
               :label="item.label"
               variant="ghost"
               size="sm"
+              color="neutral"
             />
           </nav>
         </div>
@@ -47,16 +48,13 @@ import { RoutePaths } from '~/types/routes'
 
 const { user, isAuthenticated, logout, hasRole } = useAuth()
 
-// Навигация в зависимости от роли
 const navigation = computed(() => {
   const items: Array<{ to: string; label: string }> = []
   
   if (!user.value) return items
   
-  // Общие для всех
   items.push({ to: RoutePaths.Main, label: 'Главная' })
   
-  // Администратор
   if (hasRole([UserRole.ADMIN])) {
     items.push(
       { to: RoutePaths.Faculties.List, label: 'Факультеты' },
@@ -68,7 +66,6 @@ const navigation = computed(() => {
     )
   }
   
-  // Декан
   if (hasRole([UserRole.DEAN])) {
     items.push(
       { to: RoutePaths.Faculties.List, label: 'Факультет' },
@@ -78,7 +75,6 @@ const navigation = computed(() => {
     )
   }
   
-  // Преподаватель
   if (hasRole([UserRole.TEACHER])) {
     items.push(
       { to: RoutePaths.Gradebooks.List, label: 'Ведомости' },
@@ -86,7 +82,6 @@ const navigation = computed(() => {
     )
   }
   
-  // Студент
   if (hasRole([UserRole.STUDENT])) {
     items.push(
       { to: RoutePaths.Students.Card(user.value.id), label: 'Моя карточка' },
@@ -97,7 +92,6 @@ const navigation = computed(() => {
   return items
 })
 
-// Меню пользователя
 const userMenuItems = computed(() => [
   [
     {

@@ -2,8 +2,8 @@
   <div class="flex-1 flex items-center justify-center py-10">
     <UCard class="w-full max-w-md">
       <template #header>
-        <h1 class="text-2xl font-bold text-center">Вход в систему</h1>
-        <p class="text-sm text-gray-500 text-center mt-2">
+        <h1 class="text-2xl font-bold text-center text-gray-900 dark:text-white">Вход в систему</h1>
+        <p class="text-sm text-gray-500 dark:text-gray-400 text-center mt-2">
           Введите свои учетные данные для входа
         </p>
       </template>
@@ -13,10 +13,10 @@
         v-if="!mfaRequired"
         :schema="loginSchema"
         :state="loginState"
-        class="space-y-4 w-full"
+        class="space-y-4"
         @submit="handleLogin"
       >
-        <UFormField label="Email" name="email" class="w-full">
+        <UFormField label="Email" name="email">
           <UInput
             v-model="loginState.email"
             type="email"
@@ -26,7 +26,7 @@
           />
         </UFormField>
 
-        <UFormField label="Пароль" name="password" class="w-full">
+        <UFormField label="Пароль" name="password">
           <UInput
             v-model="loginState.password"
             type="password"
@@ -40,7 +40,7 @@
           type="submit"
           color="primary"
           size="lg"
-          class="w-full"
+          class="w-full justify-center"
           :loading="isLoading"
         >
           Войти
@@ -48,11 +48,11 @@
       </UForm>
 
       <!-- MFA выбор метода -->
-      <div v-else class="space-y-4 w-full">
+      <div v-else class="space-y-4">
         <div class="text-center">
           <UIcon name="i-heroicons-shield-check" class="w-12 h-12 mx-auto text-primary" />
-          <h2 class="text-lg font-semibold mt-2">Двухфакторная аутентификация</h2>
-          <p class="text-sm text-gray-500">
+          <h2 class="text-lg font-semibold mt-2 text-gray-900 dark:text-white">Двухфакторная аутентификация</h2>
+          <p class="text-sm text-gray-500 dark:text-gray-400">
             {{ mfaMethod === 'TOTP' 
               ? 'Введите код из Google Authenticator' 
               : 'Введите код из email или запросите новый' 
@@ -62,7 +62,7 @@
 
         <!-- TOTP ввод -->
         <div v-if="mfaMethod === 'TOTP'" class="space-y-4">
-          <UFormField label="Код из приложения" class="w-full">
+          <UFormField label="Код из приложения">
             <UPinInput
               v-model="mfaCode"
               :length="6"
@@ -76,7 +76,7 @@
 
         <!-- OTP ввод -->
         <div v-else-if="mfaMethod === 'OTP'" class="space-y-4">
-          <UFormField label="Код из email" class="w-full">
+          <UFormField label="Код из email">
             <UPinInput
               v-model="mfaCode"
               :length="6"
@@ -104,7 +104,7 @@
       </div>
 
       <template #footer>
-        <p class="text-xs text-center text-gray-500">
+        <p class="text-xs text-center text-gray-500 dark:text-gray-400">
           Система учёта успеваемости студентов
         </p>
       </template>
