@@ -1,5 +1,6 @@
 import datetime
 import secrets
+from typing import Optional
 
 from pydantic import computed_field
 from pydantic_settings import BaseSettings
@@ -12,7 +13,7 @@ class Settings(BaseSettings):
 
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
 
-    PROJECT_NAME: str = "FastAPI"
+    PROJECT_NAME: str = "University"
 
     POSTGRES_PORT: int = 5432
     POSTGRES_HOST: str
@@ -22,7 +23,7 @@ class Settings(BaseSettings):
 
     @computed_field
     @property
-    def SQLALCHEMY_DATABASE_URI(self) -> str:  # noqa
+    def SQLALCHEMY_DATABASE_URI(self) -> str:
         return "{}://{}:{}@{}:{}/{}".format(
             "postgresql+asyncpg",
             self.POSTGRES_USER,
@@ -51,16 +52,22 @@ class Settings(BaseSettings):
     def JWT_ACCESS_TOKEN_EXPIRES(self) -> datetime.timedelta:
         return datetime.timedelta(minutes=self.JWT_ACCESS_TOKEN_EXPIRES_MINUTE)
 
+    # OTP settings
+    OTP_CODE_LENGTH: int = 6
+    OTP_CODE_EXPIRE_MINUTES: int = 10
+
+    # SMTP settings
     SMTP_HOST: str = "mailhog"
-    SMTP_PORT: int = "8025"
+    SMTP_PORT: int = 1025
     SMTP_USER: str = "user"
     SMTP_PASSWORD: str = "password"
-    SMTP_FROM: str = "support@example.com"
+    SMTP_FROM: str = "noreply@university.ru"
     SMTP_TLS: bool = False
 
+    # Frontend URL for email links
+    FRONTEND_URL: str = "http://localhost:3000"
 
-settings = Settings()  # noqa
 
-__all__ = (
-    "settings",
-)
+settings = Settings()
+
+__all__ = ("settings",)

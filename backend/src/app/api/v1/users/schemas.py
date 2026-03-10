@@ -1,6 +1,7 @@
 from typing import Optional
+from datetime import datetime
 
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, Field
 
 from app.models import MFAMethod
 from app.models.user import UserRole
@@ -19,14 +20,14 @@ class UserCreateRequestSchema(UserBase):
 
 
 class UserUpdateRequestSchema(UserBase):
-    # Делаем все поля базовой схемы опциональными для PATCH/PUT
     __annotations__ = {k: Optional[v] for k, v in UserBase.__annotations__.items()}
     password: Optional[str] = None
 
 
 class UserReadResponseSchema(UserBase):
     id: int
-    # hashed_password и totp_secret исключаем через Field(exclude=True)
-    # или просто не объявляем их здесь
+    
     class Config:
         from_attributes = True
+        # Исключаем чувствительные поля
+        extra = 'ignore'
