@@ -20,7 +20,7 @@ export default defineNuxtConfig({
   ],
   runtimeConfig: {
     public: {
-      baseApiUrl: '/api',
+      baseApiUrl: '/api/v1',
     },
   },
 })
