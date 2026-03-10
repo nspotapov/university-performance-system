@@ -48,7 +48,7 @@
       </UForm>
 
       <!-- MFA выбор метода -->
-      <div v-else class="space-y-4">
+      <div v-else class="space-y-6">
         <div class="text-center">
           <UIcon name="i-heroicons-shield-check" class="w-12 h-12 mx-auto text-primary" />
           <h2 class="text-lg font-semibold mt-2 text-gray-900 dark:text-white">Двухфакторная аутентификация</h2>
@@ -62,30 +62,28 @@
 
         <!-- TOTP ввод -->
         <div v-if="mfaMethod === 'TOTP'" class="space-y-4">
-          <UFormField label="Код из приложения">
+          <div class="flex flex-col items-center">
             <UPinInput
               v-model="mfaCode"
               :length="6"
               type="number"
               otp
-              class="justify-center"
               @update:model-value="onCodeComplete"
             />
-          </UFormField>
+          </div>
         </div>
 
         <!-- OTP ввод -->
         <div v-else-if="mfaMethod === 'OTP'" class="space-y-4">
-          <UFormField label="Код из email">
+          <div class="flex flex-col items-center">
             <UPinInput
               v-model="mfaCode"
               :length="6"
               type="number"
               otp
-              class="justify-center"
               @update:model-value="onCodeComplete"
             />
-          </UFormField>
+          </div>
           
           <div class="text-center">
             <UButton
