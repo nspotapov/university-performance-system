@@ -2,9 +2,9 @@ from typing import Annotated, Optional
 from fastapi import APIRouter, Depends, Query
 from app.api.v1.dependencies import check_user_role, get_credit_service
 from app.api.v1.schemas import Page
+from app.api.v1.academic.schemas import CreditReadResponseSchema, CreditCreateRequestSchema, CreditUpdateRequestSchema
 from app.models import UserRole
 from app.services import CreditService
-from .schemas import CreditReadResponseSchema, CreditCreateRequestSchema, CreditUpdateRequestSchema
 
 router = APIRouter(prefix="/credits", tags=["Credits"])
 

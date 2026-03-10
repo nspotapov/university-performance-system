@@ -2,9 +2,9 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, Query
 from app.api.v1.dependencies import check_user_role, get_course_service
 from app.api.v1.schemas import Page
+from app.api.v1.university.schemas import CourseReadResponseSchema, CourseCreateRequestSchema, CourseUpdateRequestSchema
 from app.models import UserRole
 from app.services import CourseService
-from .schemas import CourseReadResponseSchema, CourseCreateRequestSchema, CourseUpdateRequestSchema
 
 router = APIRouter(prefix="/courses", tags=["Courses"])
 

@@ -2,9 +2,9 @@ from typing import Annotated, Optional
 from fastapi import APIRouter, Depends, Query
 from app.api.v1.dependencies import check_user_role, get_grade_service
 from app.api.v1.schemas import Page
+from app.api.v1.academic.schemas import GradeReadResponseSchema, GradeCreateRequestSchema, GradeUpdateRequestSchema
 from app.models import UserRole
 from app.services import GradeService
-from .schemas import GradeReadResponseSchema, GradeCreateRequestSchema, GradeUpdateRequestSchema
 
 router = APIRouter(prefix="/grades", tags=["Grades"])
 

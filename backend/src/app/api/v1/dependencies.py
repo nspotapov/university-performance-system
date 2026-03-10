@@ -30,77 +30,75 @@ from app.services import (
 )
 
 
-async def get_auth_service(db_session: AsyncSession = Depends(get_async_session)) -> AuthService:
+def get_auth_service(db_session: AsyncSession = Depends(get_async_session)) -> AuthService:
     return AuthService(db_session)
 
 
-async def get_user_service(db_session: AsyncSession = Depends(get_async_session)) -> UserService:
+def get_user_service(db_session: AsyncSession = Depends(get_async_session)) -> UserService:
     return UserService(db_session)
 
 
-async def get_faculty_service(db_session: AsyncSession = Depends(get_async_session)) -> FacultyService:
+def get_faculty_service(db_session: AsyncSession = Depends(get_async_session)) -> FacultyService:
     return FacultyService(db_session)
 
 
-async def get_department_service(db_session: AsyncSession = Depends(get_async_session)) -> DepartmentService:
+def get_department_service(db_session: AsyncSession = Depends(get_async_session)) -> DepartmentService:
     return DepartmentService(db_session)
 
 
-async def get_study_direction_service(db_session: AsyncSession = Depends(get_async_session)) -> StudyDirectionService:
+def get_study_direction_service(db_session: AsyncSession = Depends(get_async_session)) -> StudyDirectionService:
     return StudyDirectionService(db_session)
 
 
-async def get_discipline_service(db_session: AsyncSession = Depends(get_async_session)) -> DisciplineService:
+def get_discipline_service(db_session: AsyncSession = Depends(get_async_session)) -> DisciplineService:
     return DisciplineService(db_session)
 
 
-async def get_curriculum_service(db_session: AsyncSession = Depends(get_async_session)) -> CurriculumService:
+def get_curriculum_service(db_session: AsyncSession = Depends(get_async_session)) -> CurriculumService:
     return CurriculumService(db_session)
 
 
-async def get_course_service(db_session: AsyncSession = Depends(get_async_session)) -> CourseService:
+def get_course_service(db_session: AsyncSession = Depends(get_async_session)) -> CourseService:
     return CourseService(db_session)
 
 
-async def get_semester_service(db_session: AsyncSession = Depends(get_async_session)) -> SemesterService:
+def get_semester_service(db_session: AsyncSession = Depends(get_async_session)) -> SemesterService:
     return SemesterService(db_session)
 
 
-async def get_study_group_service(db_session: AsyncSession = Depends(get_async_session)) -> StudyGroupService:
+def get_study_group_service(db_session: AsyncSession = Depends(get_async_session)) -> StudyGroupService:
     return StudyGroupService(db_session)
 
 
-async def get_academic_student_group_service(db_session: AsyncSession = Depends(get_async_session)) -> AcademicStudentGroupService:
+def get_academic_student_group_service(db_session: AsyncSession = Depends(get_async_session)) -> AcademicStudentGroupService:
     return AcademicStudentGroupService(db_session)
 
 
-async def get_student_service(db_session: AsyncSession = Depends(get_async_session)) -> StudentService:
+def get_student_service(db_session: AsyncSession = Depends(get_async_session)) -> StudentService:
     return StudentService(db_session)
 
 
-async def get_teacher_service(db_session: AsyncSession = Depends(get_async_session)) -> TeacherService:
+def get_teacher_service(db_session: AsyncSession = Depends(get_async_session)) -> TeacherService:
     return TeacherService(db_session)
 
 
-async def get_gradebook_service(db_session: AsyncSession = Depends(get_async_session)) -> GradeBookService:
+def get_gradebook_service(db_session: AsyncSession = Depends(get_async_session)) -> GradeBookService:
     return GradeBookService(db_session)
 
 
-async def get_grade_service(db_session: AsyncSession = Depends(get_async_session)) -> GradeService:
+def get_grade_service(db_session: AsyncSession = Depends(get_async_session)) -> GradeService:
     return GradeService(db_session)
 
 
-async def get_credit_service(db_session: AsyncSession = Depends(get_async_session)) -> CreditService:
+def get_credit_service(db_session: AsyncSession = Depends(get_async_session)) -> CreditService:
     return CreditService(db_session)
 
 
-async def get_exam_service(db_session: AsyncSession = Depends(get_async_session)) -> ExamService:
+def get_exam_service(db_session: AsyncSession = Depends(get_async_session)) -> ExamService:
     return ExamService(db_session)
 
 
-async def get_performance_analytics_service(
-    db_session: AsyncSession = Depends(get_async_session)
-) -> PerformanceAnalyticsService:
+def get_performance_analytics_service(db_session: AsyncSession = Depends(get_async_session)) -> PerformanceAnalyticsService:
     return PerformanceAnalyticsService(db_session)
 
 
@@ -108,13 +106,10 @@ async def get_current_user(
         request: Request,
         user_service: Annotated[UserService, Depends(get_user_service)],
 ) -> UserReadResponseSchema:
-    # Get access token from HEADERS only (not cookies)
     access_token = await jwt_security.get_access_token_from_request(
         request,
-        locations=["headers"],  # Only look in headers
+        locations=["headers"],
     )
-    # Verify the access token
-    # No CSRF verification needed for header-based tokens
     access_token_payload = jwt_security.verify_token(access_token, verify_csrf=False)
     return await user_service.get_user(int(access_token_payload.sub))
 

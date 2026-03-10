@@ -2,9 +2,9 @@ from typing import Annotated, Optional
 from fastapi import APIRouter, Depends, Query
 from app.api.v1.dependencies import check_user_role, get_study_group_service
 from app.api.v1.schemas import Page
+from app.api.v1.university.schemas import StudyGroupReadResponseSchema, StudyGroupCreateRequestSchema, StudyGroupUpdateRequestSchema
 from app.models import UserRole
 from app.services import StudyGroupService
-from .schemas import StudyGroupReadResponseSchema, StudyGroupCreateRequestSchema, StudyGroupUpdateRequestSchema
 
 router = APIRouter(prefix="/study-groups", tags=["Study Groups"])
 

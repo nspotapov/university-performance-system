@@ -6,6 +6,7 @@ from .schemas import (
     GradeReadResponseSchema, GradeCreateRequestSchema, GradeUpdateRequestSchema,
     CreditReadResponseSchema, CreditCreateRequestSchema, CreditUpdateRequestSchema,
     ExamReadResponseSchema, ExamCreateRequestSchema, ExamUpdateRequestSchema,
+    PerformanceStatsSchema, StudentCardSchema,
 )
 
 __all__ = (
@@ -16,4 +17,5 @@ __all__ = (
     "GradeReadResponseSchema", "GradeCreateRequestSchema", "GradeUpdateRequestSchema",
     "CreditReadResponseSchema", "CreditCreateRequestSchema", "CreditUpdateRequestSchema",
     "ExamReadResponseSchema", "ExamCreateRequestSchema", "ExamUpdateRequestSchema",
+    "PerformanceStatsSchema", "StudentCardSchema",
 )
