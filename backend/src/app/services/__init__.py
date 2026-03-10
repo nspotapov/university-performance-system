@@ -13,7 +13,7 @@ from .university import (
 from .academic import (
     StudentService,
     TeacherService,
-    StudentGroupService,
+    StudentGroupService as AcademicStudentGroupService,
     GradeBookService,
     GradeService,
     CreditService,
@@ -34,7 +34,7 @@ __all__ = (
     "StudyGroupService",
     "StudentService",
     "TeacherService",
-    "StudentGroupService",
+    "AcademicStudentGroupService",
     "GradeBookService",
     "GradeService",
     "CreditService",

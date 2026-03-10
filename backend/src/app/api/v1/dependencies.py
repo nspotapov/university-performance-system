@@ -21,6 +21,7 @@ from app.services import (
     StudyGroupService,
     StudentService,
     TeacherService,
+    AcademicStudentGroupService,
     GradeBookService,
     GradeService,
     CreditService,
@@ -67,6 +68,10 @@ async def get_semester_service(db_session: AsyncSession = Depends(get_async_sess
 
 async def get_study_group_service(db_session: AsyncSession = Depends(get_async_session)) -> StudyGroupService:
     return StudyGroupService(db_session)
+
+
+async def get_academic_student_group_service(db_session: AsyncSession = Depends(get_async_session)) -> AcademicStudentGroupService:
+    return AcademicStudentGroupService(db_session)
 
 
 async def get_student_service(db_session: AsyncSession = Depends(get_async_session)) -> StudentService:
@@ -138,6 +143,7 @@ __all__ = (
     "get_course_service",
     "get_semester_service",
     "get_study_group_service",
+    "get_academic_student_group_service",
     "get_student_service",
     "get_teacher_service",
     "get_gradebook_service",
