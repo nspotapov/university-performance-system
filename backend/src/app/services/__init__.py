@@ -1,9 +1,43 @@
 from .auth import AuthService
-from .mail import MailService
 from .user import UserService
+from .university import (
+    FacultyService,
+    DepartmentService,
+    StudyDirectionService,
+    DisciplineService,
+    CurriculumService,
+    CourseService,
+    SemesterService,
+    StudyGroupService,
+)
+from .academic import (
+    StudentService,
+    TeacherService,
+    StudentGroupService,
+    GradeBookService,
+    GradeService,
+    CreditService,
+    ExamService,
+    PerformanceAnalyticsService,
+)
 
 __all__ = (
     "AuthService",
-    "MailService",
     "UserService",
+    "FacultyService",
+    "DepartmentService",
+    "StudyDirectionService",
+    "DisciplineService",
+    "CurriculumService",
+    "CourseService",
+    "SemesterService",
+    "StudyGroupService",
+    "StudentService",
+    "TeacherService",
+    "StudentGroupService",
+    "GradeBookService",
+    "GradeService",
+    "CreditService",
+    "ExamService",
+    "PerformanceAnalyticsService",
 )
