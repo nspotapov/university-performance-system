@@ -29,12 +29,12 @@ services:
       options:
         max-file: "1"
         max-size: "10m"
-    healthcheck:
-      test: [ "CMD", "curl", "--fail", "http://127.0.0.1:8000/api/common/healthcheck" ]
-      interval: 5s
-      timeout: 10s
-      retries: 3
-      start_period: 5s
+    # healthcheck:
+    #   test: [ "CMD", "curl", "--fail", "http://127.0.0.1:8000/api/common/healthcheck" ]
+    #   interval: 5s
+    #   timeout: 10s
+    #   retries: 3
+    #   start_period: 5s
 
   frontend:
     build:
