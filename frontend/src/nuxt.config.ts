@@ -23,9 +23,10 @@ export default defineNuxtConfig({
       baseApiUrl: '/api',
     },
   },
-  // Отключаем темную тему
   colorMode: {
-    preference: 'light',
+    preference: 'system',
     fallback: 'light',
+    classPrefix: '',
+    classSuffix: '',
   },
 })

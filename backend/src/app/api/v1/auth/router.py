@@ -7,6 +7,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 from app.api.v1.dependencies import get_auth_service, get_user_service, get_current_user
 from app.core import messages
 from app.core.security import jwt_security, mfa_jwt_security
+from app.core.config import settings
 from app.models import UserRole, MFAMethod
 from app.services import AuthService, UserService
 from .schemas import (
@@ -29,18 +30,10 @@ from ..users.schemas import UserReadResponseSchema
 router = APIRouter(prefix="/auth", tags=["Authentication"])
 
 
-# ============================================================================
-# Helper для получения пользователя с MFA токеном
-# ============================================================================
-
 async def get_current_user_with_mfa_token(
     request: Request,
     user_service: Annotated[UserService, Depends(get_user_service)],
 ) -> UserReadResponseSchema:
-    """
-    Получение текущего пользователя с MFA токеном.
-    MFA токен принимается только из заголовка Authorization.
-    """
     access_token = await mfa_jwt_security.get_access_token_from_request(
         request,
         locations=["headers"],
@@ -49,23 +42,14 @@ async def get_current_user_with_mfa_token(
     return await user_service.get_user(int(access_token_payload.sub))
 
 
-# ============================================================================
-# OAuth2 Token Endpoint
-# ============================================================================
-
 @router.post("/token")
 async def oauth2_token(
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
     auth_service: Annotated[AuthService, Depends(get_auth_service)],
     response: Response
 ) -> LoginResponseSchema:
-    """OAuth2 совместимый endpoint для входа."""
     return await login_user(LoginRequestSchema(email=form_data.username, password=form_data.password), auth_service, response)
 
-
-# ============================================================================
-# Login / Logout
-# ============================================================================
 
 @router.post("/login")
 async def login_user(
@@ -119,10 +103,6 @@ async def logout_user(response: Response):
     return {"message": "Успешный выход"}
 
 
-# ============================================================================
-# Token Refresh
-# ============================================================================
-
 @router.post("/refresh", response_model=RefreshTokenResponse)
 async def refresh_access_token(
     request: Request,
@@ -163,13 +143,9 @@ async def refresh_access_token(
     return RefreshTokenResponse(
         access_token=new_access_token,
         token_type="bearer",
-        expires_in=int(jwt_security.access_token_expires.total_seconds())
+        expires_in=settings.JWT_ACCESS_TOKEN_EXPIRES_MINUTE * 60
     )
 
-
-# ============================================================================
-# MFA - TOTP (Google Authenticator)
-# ============================================================================
 
 @router.post("/mfa/totp/verify", response_model=VerifyTotpResponseSchema)
 async def verify_totp_code(
@@ -193,13 +169,9 @@ async def verify_totp_code(
     return VerifyTotpResponseSchema(
         access_token=access_token,
         token_type="bearer",
-        expires_in=int(jwt_security.access_token_expires.total_seconds())
+        expires_in=settings.JWT_ACCESS_TOKEN_EXPIRES_MINUTE * 60
     )
 
-
-# ============================================================================
-# MFA - OTP (Email)
-# ============================================================================
 
 @router.post("/mfa/otp/send", response_model=SendOtpResponseSchema)
 async def send_otp_code(
@@ -207,7 +179,6 @@ async def send_otp_code(
     current_user: Annotated[UserReadResponseSchema, Depends(get_current_user_with_mfa_token)],
 ) -> SendOtpResponseSchema:
     await auth_service.send_otp_code(current_user)
-    from app.core.config import settings
     return SendOtpResponseSchema(
         message="OTP код отправлен на вашу почту",
         expires_in=settings.OTP_CODE_EXPIRE_MINUTES * 60
@@ -235,13 +206,9 @@ async def verify_otp_code(
     return VerifyOtpResponseSchema(
         access_token=access_token,
         token_type="bearer",
-        expires_in=int(jwt_security.access_token_expires.total_seconds())
+        expires_in=settings.JWT_ACCESS_TOKEN_EXPIRES_MINUTE * 60
     )
 
-
-# ============================================================================
-# MFA Setup & Management
-# ============================================================================
 
 @router.get("/mfa/status", response_model=MfaMethodResponseSchema)
 async def get_mfa_status(
@@ -302,10 +269,6 @@ async def disable_mfa(
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail=messages.ERROR_INVALID_CREDENTIALS)
     return {"message": "MFA аутентификация успешно отключена"}
 
-
-# ============================================================================
-# Current User
-# ============================================================================
 
 @router.get("/me", response_model=UserReadResponseSchema)
 async def get_current_user_info(

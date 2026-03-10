@@ -4,7 +4,5 @@ export default defineAppConfig({
       primary: 'emerald',
       neutral: 'slate',
     },
-    // Принудительно отключаем темную тему
-    strategy: 'all',
   },
 })

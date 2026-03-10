@@ -13,24 +13,26 @@
         v-if="!mfaRequired"
         :schema="loginSchema"
         :state="loginState"
-        class="space-y-4"
+        class="space-y-4 w-full"
         @submit="handleLogin"
       >
-        <UFormField label="Email" name="email">
+        <UFormField label="Email" name="email" class="w-full">
           <UInput
             v-model="loginState.email"
             type="email"
             placeholder="email@university.ru"
             autocomplete="email"
+            class="w-full"
           />
         </UFormField>
 
-        <UFormField label="Пароль" name="password">
+        <UFormField label="Пароль" name="password" class="w-full">
           <UInput
             v-model="loginState.password"
             type="password"
             placeholder="••••••••"
             autocomplete="current-password"
+            class="w-full"
           />
         </UFormField>
 
@@ -46,7 +48,7 @@
       </UForm>
 
       <!-- MFA выбор метода -->
-      <div v-else class="space-y-4">
+      <div v-else class="space-y-4 w-full">
         <div class="text-center">
           <UIcon name="i-heroicons-shield-check" class="w-12 h-12 mx-auto text-primary" />
           <h2 class="text-lg font-semibold mt-2">Двухфакторная аутентификация</h2>
@@ -60,7 +62,7 @@
 
         <!-- TOTP ввод -->
         <div v-if="mfaMethod === 'TOTP'" class="space-y-4">
-          <UFormField label="Код из приложения">
+          <UFormField label="Код из приложения" class="w-full">
             <UPinInput
               v-model="mfaCode"
               :length="6"
@@ -74,7 +76,7 @@
 
         <!-- OTP ввод -->
         <div v-else-if="mfaMethod === 'OTP'" class="space-y-4">
-          <UFormField label="Код из email">
+          <UFormField label="Код из email" class="w-full">
             <UPinInput
               v-model="mfaCode"
               :length="6"
@@ -123,7 +125,6 @@ const { $api } = useNuxtApp()
 const toast = useToast()
 const { login, verifyTotp, verifyOtp, sendOtp } = useAuth()
 
-// Схема валидации
 const loginSchema = v.object({
   email: v.pipe(
     v.string(),
@@ -136,13 +137,11 @@ const loginSchema = v.object({
   ),
 })
 
-// Состояние формы входа
 const loginState = reactive({
   email: '',
   password: '',
 })
 
-// Состояние MFA
 const mfaRequired = ref(false)
 const mfaMethod = ref<MFAMethod | null>(null)
 const mfaCode = ref<string[]>([])
@@ -150,7 +149,6 @@ const mfaError = ref('')
 const isLoading = ref(false)
 const isOtpLoading = ref(false)
 
-// Обработка ввода кода
 const onCodeComplete = async () => {
   if (mfaCode.value.length !== 6 || isOtpLoading.value) return
   
@@ -180,7 +178,6 @@ const onCodeComplete = async () => {
   }
 }
 
-// Отправка OTP кода
 const sendOtpCode = async () => {
   isOtpLoading.value = true
   try {
@@ -201,7 +198,6 @@ const sendOtpCode = async () => {
   }
 }
 
-// Обработка входа
 const handleLogin = async () => {
   isLoading.value = true
   mfaError.value = ''
@@ -216,7 +212,6 @@ const handleLogin = async () => {
       mfaRequired.value = true
       mfaMethod.value = response.mfa_method || MFAMethod.OTP
       
-      // Если OTP, сразу отправляем код
       if (mfaMethod.value === MFAMethod.OTP) {
         await sendOtpCode()
       }
