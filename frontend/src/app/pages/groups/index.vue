@@ -60,7 +60,7 @@ const { getStudyGroups, createStudyGroup, updateStudyGroup, deleteStudyGroup } =
 const { getStudyDirections, getCourses } = useUniversity()
 const toast = useToast()
 
-const columns = [{ key: 'name', label: 'Название' }, { key: 'year', label: 'Год набора' }, { key: 'actions', label: 'Действия' }]
+const columns = [{ key: 'name', label: 'Название', id: 'name' }, { key: 'year', label: 'Год набора', id: 'year' }, { key: 'actions', label: 'Действия', id: 'actions' }]
 const items = ref<StudyGroup[]>([])
 const isLoading = ref(false)
 const isSubmitting = ref(false)

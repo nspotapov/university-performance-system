@@ -60,7 +60,7 @@ const { getStudyDirections, createStudyDirection, updateStudyDirection, deleteSt
 const { getFaculties } = useUniversity()
 const toast = useToast()
 
-const columns = [{ key: 'name', label: 'Название' }, { key: 'code', label: 'Код' }, { key: 'level', label: 'Уровень' }, { key: 'actions', label: 'Действия' }]
+const columns = [{ key: 'name', label: 'Название', id: 'name' }, { key: 'code', label: 'Код', id: 'code' }, { key: 'level', label: 'Уровень', id: 'level' }, { key: 'actions', label: 'Действия', id: 'actions' }]
 const items = ref<StudyDirection[]>([])
 const isLoading = ref(false)
 const isSubmitting = ref(false)

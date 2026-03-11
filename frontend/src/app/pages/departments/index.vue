@@ -57,7 +57,7 @@ const { getDepartments, createDepartment, updateDepartment, deleteDepartment } =
 const { getFaculties } = useUniversity()
 const toast = useToast()
 
-const columns = [{ key: 'name', label: 'Название' }, { key: 'short_name', label: 'Краткое название' }, { key: 'actions', label: 'Действия' }]
+const columns = [{ key: 'name', label: 'Название', id: 'name' }, { key: 'short_name', label: 'Краткое название', id: 'short_name' }, { key: 'actions', label: 'Действия', id: 'actions' }]
 const departments = ref<Department[]>([])
 const isLoading = ref(false)
 const isSubmitting = ref(false)

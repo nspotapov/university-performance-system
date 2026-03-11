@@ -81,10 +81,10 @@ const { getDepartments } = useUniversity()
 const toast = useToast()
 
 const columns = [
-  { key: 'full_name', label: 'ФИО' },
-  { key: 'position', label: 'Должность' },
-  { key: 'academic_degree', label: 'Степень' },
-  { key: 'actions', label: 'Действия' },
+  { key: 'full_name', label: 'ФИО', id: 'full_name' },
+  { key: 'position', label: 'Должность', id: 'position' },
+  { key: 'academic_degree', label: 'Степень', id: 'academic_degree' },
+  { key: 'actions', label: 'Действия', id: 'actions' },
 ]
 
 const teachers = ref<Teacher[]>([])

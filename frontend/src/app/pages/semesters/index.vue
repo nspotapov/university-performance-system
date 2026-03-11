@@ -66,7 +66,7 @@ const { getSemesters, createSemester, updateSemester, deleteSemester } = useUniv
 const { getCourses } = useUniversity()
 const toast = useToast()
 
-const columns = [{ key: 'name', label: 'Название' }, { key: 'number', label: '№' }, { key: 'start_date', label: 'Начало' }, { key: 'end_date', label: 'Окончание' }, { key: 'is_active', label: 'Статус' }, { key: 'actions', label: 'Действия' }]
+const columns = [{ key: 'name', label: 'Название', id: 'name' }, { key: 'number', label: '№', id: 'number' }, { key: 'start_date', label: 'Начало', id: 'start_date' }, { key: 'end_date', label: 'Окончание', id: 'end_date' }, { key: 'is_active', label: 'Статус', id: 'is_active' }, { key: 'actions', label: 'Действия', id: 'actions' }]
 const items = ref<Semester[]>([])
 const isLoading = ref(false)
 const isSubmitting = ref(false)

@@ -81,10 +81,10 @@ const { getStudents, createStudent, updateStudent, deleteStudent: deleteApi } = 
 const toast = useToast()
 
 const columns = [
-  { key: 'full_name', label: 'ФИО' },
-  { key: 'birth_date', label: 'Дата рождения' },
-  { key: 'enrollment_year', label: 'Год поступления' },
-  { key: 'actions', label: 'Действия' },
+  { key: 'full_name', label: 'ФИО', id: 'full_name' },
+  { key: 'birth_date', label: 'Дата рождения', id: 'birth_date' },
+  { key: 'enrollment_year', label: 'Год поступления', id: 'enrollment_year' },
+  { key: 'actions', label: 'Действия', id: 'actions' },
 ]
 
 const students = ref<Student[]>([])

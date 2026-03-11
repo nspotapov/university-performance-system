@@ -98,10 +98,10 @@ const { getFaculties, createFaculty, updateFaculty, deleteFaculty: deleteFaculty
 const toast = useToast()
 
 const columns = [
-  { key: 'name', label: 'Название' },
-  { key: 'short_name', label: 'Краткое название' },
-  { key: 'description', label: 'Описание' },
-  { key: 'actions', label: 'Действия' },
+  { key: 'name', label: 'Название', id: 'name' },
+  { key: 'short_name', label: 'Краткое название', id: 'short_name' },
+  { key: 'description', label: 'Описание', id: 'description' },
+  { key: 'actions', label: 'Действия', id: 'actions' },
 ]
 
 const faculties = ref<Faculty[]>([])

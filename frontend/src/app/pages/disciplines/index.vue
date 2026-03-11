@@ -63,7 +63,7 @@ const { getDisciplines, createDiscipline, updateDiscipline, deleteDiscipline } =
 const { getStudyDirections, getDepartments } = useAcademic()
 const toast = useToast()
 
-const columns = [{ key: 'name', label: 'Название' }, { key: 'code', label: 'Код' }, { key: 'hours', label: 'Часов' }, { key: 'actions', label: 'Действия' }]
+const columns = [{ key: 'name', label: 'Название', id: 'name' }, { key: 'code', label: 'Код', id: 'code' }, { key: 'hours', label: 'Часов', id: 'hours' }, { key: 'actions', label: 'Действия', id: 'actions' }]
 const items = ref<Discipline[]>([])
 const isLoading = ref(false)
 const isSubmitting = ref(false)

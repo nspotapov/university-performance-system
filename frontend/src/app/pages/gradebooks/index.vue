@@ -73,7 +73,7 @@ definePageMeta({ middleware: ['auth'] })
 const { getGradeBooks, createGradeBook, updateGradeBook, deleteGradeBook, getSemesters, getStudyGroups, getDisciplines, getTeachersList } = useAcademic()
 const toast = useToast()
 
-const columns = [{ key: 'name', label: 'Название' }, { key: 'grade_type', label: 'Тип' }, { key: 'is_closed', label: 'Статус' }, { key: 'actions', label: 'Действия' }]
+const columns = [{ key: 'name', label: 'Название', id: 'name' }, { key: 'grade_type', label: 'Тип', id: 'grade_type' }, { key: 'is_closed', label: 'Статус', id: 'is_closed' }, { key: 'actions', label: 'Действия', id: 'actions' }]
 const items = ref<GradeBook[]>([])
 const isLoading = ref(false)
 const isSubmitting = ref(false)

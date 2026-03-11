@@ -19,7 +19,7 @@
         <template #header>
           <h3 class="text-lg font-semibold text-gray-900 dark:text-white">{{ semester }}</h3>
         </template>
-        <UTable :columns="gradeColumns" :rows="grades.map((g: any) => ({
+        <UTable :columns="gradeColumns" :data="grades.map((g: any) => ({
           discipline: g.discipline,
           grade: g.grade,
           type: g.type,
@@ -35,7 +35,7 @@
       </template>
       <div v-for="(credits, semester) in studentCard.credits_by_semester" :key="semester" class="mb-4">
         <h4 class="font-medium text-gray-700 dark:text-gray-300 mb-2">{{ semester }}</h4>
-        <UTable :columns="creditColumns" :rows="credits.map((c: any) => ({
+        <UTable :columns="creditColumns" :data="credits.map((c: any) => ({
           discipline: c.discipline,
           passed: c.passed ? 'Зачтено' : 'Не зачтено',
           date: c.date
@@ -50,7 +50,7 @@
       </template>
       <div v-for="(exams, semester) in studentCard.exams_by_semester" :key="semester" class="mb-4">
         <h4 class="font-medium text-gray-700 dark:text-gray-300 mb-2">{{ semester }}</h4>
-        <UTable :columns="examColumns" :rows="exams.map((e: any) => ({
+        <UTable :columns="examColumns" :data="exams.map((e: any) => ({
           discipline: e.discipline,
           grade: e.grade,
           date: e.date
@@ -81,9 +81,22 @@ const route = useRoute()
 const { getStudentCard } = useAcademic()
 const studentCard = ref<StudentCard | null>(null)
 
-const gradeColumns = [{ key: 'discipline', label: 'Дисциплина' }, { key: 'grade', label: 'Оценка' }, { key: 'type', label: 'Тип' }, { key: 'date', label: 'Дата' }]
-const creditColumns = [{ key: 'discipline', label: 'Дисциплина' }, { key: 'passed', label: 'Статус' }, { key: 'date', label: 'Дата' }]
-const examColumns = [{ key: 'discipline', label: 'Дисциплина' }, { key: 'grade', label: 'Оценка' }, { key: 'date', label: 'Дата' }]
+const gradeColumns = [
+  { key: 'discipline', label: 'Дисциплина', id: 'discipline' },
+  { key: 'grade', label: 'Оценка', id: 'grade' },
+  { key: 'type', label: 'Тип', id: 'type' },
+  { key: 'date', label: 'Дата', id: 'date' }
+]
+const creditColumns = [
+  { key: 'discipline', label: 'Дисциплина', id: 'discipline' },
+  { key: 'passed', label: 'Статус', id: 'passed' },
+  { key: 'date', label: 'Дата', id: 'date' }
+]
+const examColumns = [
+  { key: 'discipline', label: 'Дисциплина', id: 'discipline' },
+  { key: 'grade', label: 'Оценка', id: 'grade' },
+  { key: 'date', label: 'Дата', id: 'date' }
+]
 
 const loadCard = async () => {
   try {

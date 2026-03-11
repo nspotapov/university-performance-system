@@ -32,13 +32,12 @@
     <div v-if="showStats" class="mt-8">
       <h2 class="text-xl font-bold mb-4">Статистика успеваемости</h2>
       <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <UStat
-          v-for="stat in stats"
-          :key="stat.label"
-          :label="stat.label"
-          :value="stat.value"
-          :color="stat.color"
-        />
+        <UCard v-for="stat in stats" :key="stat.label" class="p-4">
+          <div class="text-center">
+            <p class="text-sm text-gray-500">{{ stat.label }}</p>
+            <p class="text-2xl font-bold mt-1" :class="`text-${stat.color}-600`">{{ stat.value }}</p>
+          </div>
+        </UCard>
       </div>
     </div>
   </div>

@@ -20,7 +20,7 @@
         </UButton>
       </div>
 
-      <UTable :columns="columns" :rows="grades" :loading="isLoading" />
+      <UTable :columns="columns" :data="grades" :loading="isLoading" />
 
       <div class="flex justify-between items-center mt-4">
         <span class="text-sm text-gray-500">Всего: {{ pagination.total }}</span>
