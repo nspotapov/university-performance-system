@@ -27,30 +27,30 @@
         <template #header>
           <h2 class="text-xl font-bold text-gray-900 dark:text-white">{{ editingItem ? 'Редактировать' : 'Создать семестр' }}</h2>
         </template>
-        <UForm :schema="schema" :state="formState" @submit="onSubmit">
-          <UFormField label="Курс" name="course_id">
+        <form @submit.prevent="onSubmit">
+          <div><label class="block text-sm font-medium mb-1">Курс</label>
             <USelect v-model="formState.course_id" :options="courseOptions" option-attribute="label" value-attribute="value" class="w-full" />
-          </UFormField>
-          <UFormField label="Номер семестра" name="number">
+          </div>
+          <div><label class="block text-sm font-medium mb-1">Номер семестра</label>
             <UInput v-model="formState.number" type="number" class="w-full" />
-          </UFormField>
-          <UFormField label="Название" name="name">
+          </div>
+          <div><label class="block text-sm font-medium mb-1">Название</label>
             <UInput v-model="formState.name" class="w-full" placeholder="Осенний семестр 2025" />
-          </UFormField>
-          <UFormField label="Дата начала" name="start_date">
+          </div>
+          <div><label class="block text-sm font-medium mb-1">Дата начала</label>
             <UInput v-model="formState.start_date" type="date" class="w-full" />
-          </UFormField>
-          <UFormField label="Дата окончания" name="end_date">
+          </div>
+          <div><label class="block text-sm font-medium mb-1">Дата окончания</label>
             <UInput v-model="formState.end_date" type="date" class="w-full" />
-          </UFormField>
-          <UFormField label="Активный" name="is_active">
+          </div>
+          <div><label class="block text-sm font-medium mb-1">Активный</label>
             <UToggle v-model="formState.is_active" />
-          </UFormField>
+          </div>
           <div class="flex gap-2 justify-end mt-4">
             <UButton color="neutral" variant="ghost" @click="showCreateModal = false">Отмена</UButton>
             <UButton type="submit" color="primary" :loading="isSubmitting">{{ editingItem ? 'Сохранить' : 'Создать' }}</UButton>
           </div>
-        </UForm>
+        </form>
       </UCard>
     </UModal>
   </div>

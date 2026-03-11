@@ -24,30 +24,30 @@
         <template #header>
           <h2 class="text-xl font-bold text-gray-900 dark:text-white">{{ editingItem ? 'Редактировать' : 'Создать дисциплину' }}</h2>
         </template>
-        <UForm :schema="schema" :state="formState" @submit="onSubmit">
-          <UFormField label="Направление" name="study_direction_id">
+        <form @submit.prevent="onSubmit">
+          <div><label class="block text-sm font-medium mb-1">Направление</label>
             <USelect v-model="formState.study_direction_id" :options="directionOptions" option-attribute="label" value-attribute="value" class="w-full" />
-          </UFormField>
-          <UFormField label="Кафедра" name="department_id">
+          </div>
+          <div><label class="block text-sm font-medium mb-1">Кафедра</label>
             <USelect v-model="formState.department_id" :options="departmentOptions" option-attribute="label" value-attribute="value" class="w-full" />
-          </UFormField>
-          <UFormField label="Название" name="name">
+          </div>
+          <div><label class="block text-sm font-medium mb-1">Название</label>
             <UInput v-model="formState.name" class="w-full" />
-          </UFormField>
-          <UFormField label="Код" name="code">
+          </div>
+          <div><label class="block text-sm font-medium mb-1">Код</label>
             <UInput v-model="formState.code" class="w-full" />
-          </UFormField>
-          <UFormField label="Часов" name="hours">
+          </div>
+          <div><label class="block text-sm font-medium mb-1">Часов</label>
             <UInput v-model="formState.hours" type="number" class="w-full" />
-          </UFormField>
-          <UFormField label="Описание" name="description">
+          </div>
+          <div><label class="block text-sm font-medium mb-1">Описание</label>
             <UTextarea v-model="formState.description" class="w-full" />
-          </UFormField>
+          </div>
           <div class="flex gap-2 justify-end mt-4">
             <UButton color="neutral" variant="ghost" @click="showCreateModal = false">Отмена</UButton>
             <UButton type="submit" color="primary" :loading="isSubmitting">{{ editingItem ? 'Сохранить' : 'Создать' }}</UButton>
           </div>
-        </UForm>
+        </form>
       </UCard>
     </UModal>
   </div>

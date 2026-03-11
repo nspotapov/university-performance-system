@@ -58,18 +58,23 @@
           </h2>
         </template>
 
-        <UForm :schema="schema" :state="formState" @submit="onSubmit">
-          <UFormField label="Название" name="name">
-            <UInput v-model="formState.name" class="w-full" />
-          </UFormField>
+        <form @submit.prevent="onSubmit">
+          <div class="space-y-4">
+            <div>
+              <label class="block text-sm font-medium mb-1">Название</label>
+              <UInput v-model="formState.name" class="w-full" />
+            </div>
 
-          <UFormField label="Краткое название" name="short_name">
-            <UInput v-model="formState.short_name" class="w-full" />
-          </UFormField>
+            <div>
+              <label class="block text-sm font-medium mb-1">Краткое название</label>
+              <UInput v-model="formState.short_name" class="w-full" />
+            </div>
 
-          <UFormField label="Описание" name="description">
-            <UTextarea v-model="formState.description" class="w-full" />
-          </UFormField>
+            <div>
+              <label class="block text-sm font-medium mb-1">Описание</label>
+              <UTextarea v-model="formState.description" class="w-full" />
+            </div>
+          </div>
 
           <div class="flex gap-2 justify-end mt-4">
             <UButton color="neutral" variant="ghost" @click="showCreateModal = false">
@@ -79,7 +84,7 @@
               {{ editingFaculty ? 'Сохранить' : 'Создать' }}
             </UButton>
           </div>
-        </UForm>
+        </form>
       </UCard>
     </UModal>
   </div>
