@@ -9,17 +9,17 @@
     </div>
 
     <UCard>
-      <UTable :columns="columns" :rows="students" :loading="isLoading">
+      <UTable :columns="columns" :data="students" :loading="isLoading">
         <template #full_name-data="{ row }">
           <NuxtLink :to="`/students/${row.id}`" class="text-primary hover:underline">
             {{ row.last_name }} {{ row.first_name }} {{ row.middle_name || '' }}
           </NuxtLink>
         </template>
-        <template #actions-data="{ row }">
+        <template #actions-cell="{ row }">
           <div class="flex gap-2">
-            <UButton color="neutral" variant="ghost" size="sm" icon="i-heroicons-eye" @click="viewStudent(row)" />
-            <UButton color="neutral" variant="ghost" size="sm" icon="i-heroicons-pencil" @click="editStudent(row)" />
-            <UButton color="error" variant="ghost" size="sm" icon="i-heroicons-trash" @click="deleteStudent(row)" />
+            <UButton color="neutral" variant="ghost" size="sm" icon="i-heroicons-eye" @click="viewStudent(row.original)" />
+            <UButton color="neutral" variant="ghost" size="sm" icon="i-heroicons-pencil" @click="editStudent(row.original)" />
+            <UButton color="error" variant="ghost" size="sm" icon="i-heroicons-trash" @click="deleteStudent(row.original)" />
           </div>
         </template>
       </UTable>

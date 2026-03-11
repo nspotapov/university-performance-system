@@ -12,25 +12,24 @@
     <UCard>
       <UTable
         :columns="columns"
-        :rows="faculties"
+        :data="faculties"
         :loading="isLoading"
-        @select="onRowSelect"
       >
-        <template #actions-data="{ row }">
+        <template #actions-cell="{ row }">
           <div class="flex gap-2">
             <UButton
               color="neutral"
               variant="ghost"
               size="sm"
               icon="i-heroicons-pencil"
-              @click="editFaculty(row)"
+              @click="editFaculty(row.original)"
             />
             <UButton
               color="error"
               variant="ghost"
               size="sm"
               icon="i-heroicons-trash"
-              @click="deleteFaculty(row)"
+              @click="deleteFaculty(row.original)"
             />
           </div>
         </template>
@@ -146,7 +145,7 @@ const loadFaculties = async () => {
   }
 }
 
-const onRowSelect = (row: Faculty) => {
+const onRowSelect = () => {
   // Можно добавить просмотр деталей
 }
 

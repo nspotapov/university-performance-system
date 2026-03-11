@@ -3,41 +3,41 @@
     <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-6">Аналитика успеваемости</h1>
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-      <UCard v-if="stats">
+      <UCard v-if="stats" class="p-4">
         <div class="flex items-center justify-between">
           <div>
             <p class="text-sm text-gray-500 dark:text-gray-400">Всего студентов</p>
-            <p class="text-2xl font-bold text-gray-900 dark:text-white">{{ stats.total_students }}</p>
+            <p class="text-2xl font-bold text-gray-900 dark:text-white mt-1">{{ stats.total_students }}</p>
           </div>
           <UIcon name="i-heroicons-users" class="w-10 h-10 text-primary" />
         </div>
       </UCard>
 
-      <UCard v-if="stats">
+      <UCard v-if="stats" class="p-4">
         <div class="flex items-center justify-between">
           <div>
             <p class="text-sm text-gray-500 dark:text-gray-400">Отличники</p>
-            <p class="text-2xl font-bold text-green-600">{{ stats.excellent }}</p>
+            <p class="text-2xl font-bold text-green-600 mt-1">{{ stats.excellent }}</p>
           </div>
           <UIcon name="i-heroicons-star" class="w-10 h-10 text-green-600" />
         </div>
       </UCard>
 
-      <UCard v-if="stats">
+      <UCard v-if="stats" class="p-4">
         <div class="flex items-center justify-between">
           <div>
             <p class="text-sm text-gray-500 dark:text-gray-400">Успеваемость</p>
-            <p class="text-2xl font-bold text-blue-600">{{ stats.success_rate_percentage }}%</p>
+            <p class="text-2xl font-bold text-blue-600 mt-1">{{ stats.success_rate_percentage }}%</p>
           </div>
           <UIcon name="i-heroicons-chart-bar" class="w-10 h-10 text-blue-600" />
         </div>
       </UCard>
 
-      <UCard v-if="stats">
+      <UCard v-if="stats" class="p-4">
         <div class="flex items-center justify-between">
           <div>
             <p class="text-sm text-gray-500 dark:text-gray-400">Качество</p>
-            <p class="text-2xl font-bold text-purple-600">{{ stats.quality_percentage }}%</p>
+            <p class="text-2xl font-bold text-purple-600 mt-1">{{ stats.quality_percentage }}%</p>
           </div>
           <UIcon name="i-heroicons-academic-cap" class="w-10 h-10 text-purple-600" />
         </div>

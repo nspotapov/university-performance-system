@@ -9,11 +9,11 @@
     </div>
 
     <UCard>
-      <UTable :columns="columns" :rows="departments" :loading="isLoading">
-        <template #actions-data="{ row }">
+      <UTable :columns="columns" :data="departments" :loading="isLoading">
+        <template #actions-cell="{ row }">
           <div class="flex gap-2">
-            <UButton color="neutral" variant="ghost" size="sm" icon="i-heroicons-pencil" @click="editItem(row)" />
-            <UButton color="error" variant="ghost" size="sm" icon="i-heroicons-trash" @click="deleteItem(row)" />
+            <UButton color="neutral" variant="ghost" size="sm" icon="i-heroicons-pencil" @click="editItem(row.original)" />
+            <UButton color="error" variant="ghost" size="sm" icon="i-heroicons-trash" @click="deleteItem(row.original)" />
           </div>
         </template>
       </UTable>

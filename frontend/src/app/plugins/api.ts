@@ -1,4 +1,6 @@
 import type { H3Error } from 'h3'
+import { AuthConfig } from '~/types/auth'
+import { RoutePaths } from '~/types/routes'
 
 type IResponse = Response & {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -25,23 +27,14 @@ function handleApiError({ response, error }: ApiErrorOptions) {
 
   switch (response.status) {
     case 401:
-      // console.error('Unauthorized access. Redirecting to login.')
       return navigateTo(RoutePaths.Auth.Login)
 
     case 403:
-      // console.error('Forbidden:', errorMessage)
-      break
-
     case 404:
-      // console.error('Not found:', errorMessage)
-      break
-
     case 400:
-      // console.error('Bad request', errorMessage)
       break
 
     case 500:
-      // console.error('Server error:', errorMessage)
       toast.add({ title: 'Ошибка', description: 'Произошла ошибка на сервере, попробуйте позже', color: 'error' })
       break
 
@@ -58,25 +51,19 @@ function handleApiError({ response, error }: ApiErrorOptions) {
 
 export default defineNuxtPlugin({
   name: 'api-plugin',
-  setup(nuxtApp) {
-    const config = nuxtApp.$config
-
-    let baseURL = '/'
-
-    baseURL = config.public.baseApiUrl
+  setup() {
+    const config = useRuntimeConfig()
+    const accessTokenCookie = useCookie(AuthConfig.AccessTokenCookieName)
 
     const api = $fetch.create({
-      baseURL,
+      baseURL: config.public.baseApiUrl,
 
       onRequest({ request, options }) {
         // Добавляем заголовок авторизации, если есть токен
-        const tokenAuthenticated = useCookie(AuthConfig.AccessTokenCookieName)
-
-        if (tokenAuthenticated.value) {
+        if (accessTokenCookie.value) {
           options.headers = {
             ...options.headers,
-            Authorization: `Bearer ${tokenAuthenticated.value}`,
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            Authorization: `Bearer ${accessTokenCookie.value}`,
           } as any
         }
 

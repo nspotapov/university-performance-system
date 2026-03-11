@@ -9,14 +9,14 @@
     </div>
 
     <UCard>
-      <UTable :columns="columns" :rows="teachers" :loading="isLoading">
+      <UTable :columns="columns" :data="teachers" :loading="isLoading">
         <template #full_name-data="{ row }">
           {{ row.last_name }} {{ row.first_name }} {{ row.middle_name || '' }}
         </template>
-        <template #actions-data="{ row }">
+        <template #actions-cell="{ row }">
           <div class="flex gap-2">
-            <UButton color="neutral" variant="ghost" size="sm" icon="i-heroicons-pencil" @click="editTeacher(row)" />
-            <UButton color="error" variant="ghost" size="sm" icon="i-heroicons-trash" @click="deleteTeacher(row)" />
+            <UButton color="neutral" variant="ghost" size="sm" icon="i-heroicons-pencil" @click="editTeacher(row.original)" />
+            <UButton color="error" variant="ghost" size="sm" icon="i-heroicons-trash" @click="deleteTeacher(row.original)" />
           </div>
         </template>
       </UTable>

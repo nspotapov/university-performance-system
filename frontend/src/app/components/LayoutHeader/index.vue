@@ -25,7 +25,7 @@
 
         <!-- Профиль пользователя -->
         <div class="flex items-center gap-4">
-          <UDropdown
+          <UDropdownMenu
             :items="userMenuItems"
             :popper="{ placement: 'bottom-end' }"
           >
@@ -35,7 +35,7 @@
               color="neutral"
               variant="ghost"
             />
-          </UDropdown>
+          </UDropdownMenu>
         </div>
       </div>
     </div>

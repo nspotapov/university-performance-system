@@ -7,12 +7,10 @@ export default defineNuxtConfig({
     '@nuxt/eslint',
     '@nuxt/ui',
     '@nuxt/image',
+    '@nuxtjs/color-mode',
   ],
   imports: {
     autoImport: true,
-    dirs: [
-      './types',
-    ],
   },
   css: [
     '~/assets/css/nuxtui.css',
@@ -26,7 +24,6 @@ export default defineNuxtConfig({
   colorMode: {
     preference: 'system',
     fallback: 'light',
-    classPrefix: '',
     classSuffix: '',
   },
 })

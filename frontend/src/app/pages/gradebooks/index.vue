@@ -9,18 +9,18 @@
     </div>
 
     <UCard>
-      <UTable :columns="columns" :rows="items" :loading="isLoading">
+      <UTable :columns="columns" :data="items" :loading="isLoading">
         <template #grade_type-data="{ row }">
           <UBadge :color="row.grade_type === 'EXAM' ? 'primary' : 'neutral'" :label="row.grade_type === 'EXAM' ? 'Экзамен' : 'Зачет'" />
         </template>
         <template #is_closed-data="{ row }">
           <UBadge :color="row.is_closed ? 'success' : 'warning'" :label="row.is_closed ? 'Закрыта' : 'Открыта'" />
         </template>
-        <template #actions-data="{ row }">
+        <template #actions-cell="{ row }">
           <div class="flex gap-2">
-            <UButton color="primary" variant="ghost" size="sm" icon="i-heroicons-list-bullet" @click="viewGrades(row)" />
-            <UButton color="neutral" variant="ghost" size="sm" icon="i-heroicons-pencil" @click="editItem(row)" />
-            <UButton color="error" variant="ghost" size="sm" icon="i-heroicons-trash" @click="deleteItem(row)" />
+            <UButton color="primary" variant="ghost" size="sm" icon="i-heroicons-list-bullet" @click="viewGrades(row.original)" />
+            <UButton color="neutral" variant="ghost" size="sm" icon="i-heroicons-pencil" @click="editItem(row.original)" />
+            <UButton color="error" variant="ghost" size="sm" icon="i-heroicons-trash" @click="deleteItem(row.original)" />
           </div>
         </template>
       </UTable>
