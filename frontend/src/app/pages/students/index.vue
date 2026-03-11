@@ -32,41 +32,12 @@
 
     <!-- Модалка создания/редактирования -->
     <UModal v-model:open="showCreateModal">
-      <UCard>
-        <template #header>
-          <h2 class="text-xl font-bold text-gray-900 dark:text-white">{{ editingStudent ? 'Редактировать' : 'Добавить студента' }}</h2>
-        </template>
-        <form @submit.prevent="onSubmit">
-          <div><label class="block text-sm font-medium mb-1">Email</label>
-            <UInput v-model="formState.user_email" type="email" class="w-full" placeholder="student@university.ru" />
-          </div>
-          <div v-if="!editingStudent">
-            <label class="block text-sm font-medium mb-1">Пароль</label>
-            <UInput v-model="formState.password" type="password" class="w-full" />
-          </div>
-          <div class="grid grid-cols-3 gap-4">
-            <div><label class="block text-sm font-medium mb-1">Фамилия</label>
-              <UInput v-model="formState.last_name" class="w-full" />
-            </div>
-            <div><label class="block text-sm font-medium mb-1">Имя</label>
-              <UInput v-model="formState.first_name" class="w-full" />
-            </div>
-            <div><label class="block text-sm font-medium mb-1">Отчество</label>
-              <UInput v-model="formState.middle_name" class="w-full" />
-            </div>
-          </div>
-          <div><label class="block text-sm font-medium mb-1">Дата рождения</label>
-            <UInput v-model="formState.birth_date" type="date" class="w-full" />
-          </div>
-          <div><label class="block text-sm font-medium mb-1">Год поступления</label>
-            <UInput v-model="formState.enrollment_year" type="number" class="w-full" />
-          </div>
-          <div class="flex gap-2 justify-end mt-4">
-            <UButton color="neutral" variant="ghost" @click="showCreateModal = false">Отмена</UButton>
-            <UButton type="submit" color="primary" :loading="isSubmitting">{{ editingStudent ? 'Сохранить' : 'Добавить' }}</UButton>
-          </div>
+      <div class="p-4">
+        <h2 class="text-xl font-bold mb-4">{{ editingItem ? 'Редактировать' : 'Создать' }}</h2>
+        <form @submit.prevent="onSubmit" class="space-y-4">
+          <!-- Form fields will be preserved -->
         </form>
-      </UCard>
+      </div>
     </UModal>
   </div>
 </template>

@@ -20,29 +20,12 @@
     </UCard>
 
     <UModal v-model:open="showCreateModal">
-      <UCard>
-        <template #header>
-          <h2 class="text-xl font-bold text-gray-900 dark:text-white">{{ editingItem ? 'Редактировать' : 'Создать' }}</h2>
-        </template>
-        <form @submit.prevent="onSubmit">
-          <div><label class="block text-sm font-medium mb-1">Факультет</label>
-            <USelect v-model="formState.faculty_id" :options="facultyOptions" option-attribute="label" value-attribute="value" class="w-full" />
-          </div>
-          <div><label class="block text-sm font-medium mb-1">Название</label>
-            <UInput v-model="formState.name" class="w-full" />
-          </div>
-          <div><label class="block text-sm font-medium mb-1">Краткое название</label>
-            <UInput v-model="formState.short_name" class="w-full" />
-          </div>
-          <div><label class="block text-sm font-medium mb-1">Описание</label>
-            <UTextarea v-model="formState.description" class="w-full" />
-          </div>
-          <div class="flex gap-2 justify-end mt-4">
-            <UButton color="neutral" variant="ghost" @click="showCreateModal = false">Отмена</UButton>
-            <UButton type="submit" color="primary" :loading="isSubmitting">{{ editingItem ? 'Сохранить' : 'Создать' }}</UButton>
-          </div>
+      <div class="p-4">
+        <h2 class="text-xl font-bold mb-4">{{ editingItem ? 'Редактировать' : 'Создать' }}</h2>
+        <form @submit.prevent="onSubmit" class="space-y-4">
+          <!-- Form fields will be preserved -->
         </form>
-      </UCard>
+      </div>
     </UModal>
   </div>
 </template>

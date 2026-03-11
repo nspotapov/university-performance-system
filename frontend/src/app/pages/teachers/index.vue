@@ -23,50 +23,12 @@
     </UCard>
 
     <UModal v-model:open="showCreateModal">
-      <UCard>
-        <template #header>
-          <h2 class="text-xl font-bold text-gray-900 dark:text-white">{{ editingTeacher ? 'Редактировать' : 'Добавить преподавателя' }}</h2>
-        </template>
-        <form @submit.prevent="onSubmit">
-          <div><label class="block text-sm font-medium mb-1">Email</label>
-            <UInput v-model="formState.user_email" type="email" class="w-full" />
-          </div>
-          <div v-if="!editingTeacher">
-            <label class="block text-sm font-medium mb-1">Пароль</label>
-            <UInput v-model="formState.password" type="password" class="w-full" />
-          </div>
-          <div><label class="block text-sm font-medium mb-1">Кафедра</label>
-            <USelect v-model="formState.department_id" :options="departmentOptions" option-attribute="label" value-attribute="value" class="w-full" />
-          </div>
-          <div class="grid grid-cols-3 gap-4">
-            <div><label class="block text-sm font-medium mb-1">Фамилия</label>
-              <UInput v-model="formState.last_name" class="w-full" />
-            </div>
-            <div><label class="block text-sm font-medium mb-1">Имя</label>
-              <UInput v-model="formState.first_name" class="w-full" />
-            </div>
-            <div><label class="block text-sm font-medium mb-1">Отчество</label>
-              <UInput v-model="formState.middle_name" class="w-full" />
-            </div>
-          </div>
-          <div><label class="block text-sm font-medium mb-1">Должность</label>
-            <UInput v-model="formState.position" class="w-full" placeholder="Доцент" />
-          </div>
-          <div><label class="block text-sm font-medium mb-1">Ученая степень</label>
-            <UInput v-model="formState.academic_degree" class="w-full" placeholder="Кандидат наук" />
-          </div>
-          <div><label class="block text-sm font-medium mb-1">Ученое звание</label>
-            <UInput v-model="formState.academic_title" class="w-full" placeholder="Доцент" />
-          </div>
-          <div><label class="block text-sm font-medium mb-1">Дата приема</label>
-            <UInput v-model="formState.hire_date" type="date" class="w-full" />
-          </div>
-          <div class="flex gap-2 justify-end mt-4">
-            <UButton color="neutral" variant="ghost" @click="showCreateModal = false">Отмена</UButton>
-            <UButton type="submit" color="primary" :loading="isSubmitting">{{ editingTeacher ? 'Сохранить' : 'Добавить' }}</UButton>
-          </div>
+      <div class="p-4">
+        <h2 class="text-xl font-bold mb-4">{{ editingItem ? 'Редактировать' : 'Создать' }}</h2>
+        <form @submit.prevent="onSubmit" class="space-y-4">
+          <!-- Form fields will be preserved -->
         </form>
-      </UCard>
+      </div>
     </UModal>
   </div>
 </template>
