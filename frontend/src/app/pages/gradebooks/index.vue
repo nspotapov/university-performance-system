@@ -70,7 +70,7 @@ import { RoutePaths } from '~/types/routes'
 
 definePageMeta({ middleware: ['auth'] })
 
-const { getGradeBooks, createGradeBook, updateGradeBook, deleteGradeBook, getSemesters, getStudyGroups, getDisciplines, getTeachers } = useAcademic()
+const { getGradeBooks, createGradeBook, updateGradeBook, deleteGradeBook, getSemesters, getStudyGroups, getDisciplines, getTeachersList } = useAcademic()
 const toast = useToast()
 
 const columns = [{ key: 'name', label: 'Название' }, { key: 'grade_type', label: 'Тип' }, { key: 'is_closed', label: 'Статус' }, { key: 'actions', label: 'Действия' }]
@@ -100,7 +100,7 @@ const loadItems = async () => {
   isLoading.value = true
   try {
     const [gradebooks, semesters, groups, disciplines, teachers] = await Promise.all([
-      getGradeBooks(), getSemesters(), getStudyGroups(), getDisciplines(), getTeachers()
+      getGradeBooks(), getSemesters(), getStudyGroups(), getDisciplines(), getTeachersList()
     ])
     items.value = gradebooks.items
     semesterOptions.value = semesters.items.map((s: any) => ({ value: s.id, label: s.name }))

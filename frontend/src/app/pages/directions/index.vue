@@ -56,7 +56,8 @@ import type { StudyDirection } from '~/types/university'
 
 definePageMeta({ middleware: ['auth'] })
 
-const { getStudyDirections, createStudyDirection, updateStudyDirection, deleteStudyDirection, getFaculties } = useUniversity()
+const { getStudyDirections, createStudyDirection, updateStudyDirection, deleteStudyDirection } = useUniversity()
+const { getFaculties } = useUniversity()
 const toast = useToast()
 
 const columns = [{ key: 'name', label: 'Название' }, { key: 'code', label: 'Код' }, { key: 'level', label: 'Уровень' }, { key: 'actions', label: 'Действия' }]

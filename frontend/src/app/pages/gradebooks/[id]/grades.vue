@@ -108,7 +108,7 @@ const loadGrades = async () => {
   isLoading.value = true
   try {
     const [gradesRes, studentsRes] = await Promise.all([
-      getGrades(Number(route.params.id)),
+      getGrades(Number(route.params.id), pagination.page, pagination.size),
       getStudents()
     ])
     grades.value = gradesRes.items.map((g: Grade) => ({

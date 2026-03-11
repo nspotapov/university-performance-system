@@ -141,7 +141,7 @@ const loadOptions = async () => {
   try {
     const [faculties, directions, courses] = await Promise.all([getFaculties(), getStudyDirections(), getCourses()])
     facultyOptions.value = [{ value: '', label: 'Все факультеты' }, ...faculties.items.map((f: any) => ({ value: f.id, label: f.name }))]
-    directionOptions.value = [{ value: '', label: 'Все направления' }, ...directions.items.map((d: any) => ({ value: f.id, label: d.name }))]
+    directionOptions.value = [{ value: '', label: 'Все направления' }, ...directions.items.map((d: any) => ({ value: d.id, label: d.name }))]
     courseOptions.value = [{ value: '', label: 'Все курсы' }, ...courses.items.map((c: any) => ({ value: c.id, label: `${c.number} курс` }))]
   } catch (e: any) {
     toast.add({ title: 'Ошибка', description: e.data?.detail, color: 'error' })

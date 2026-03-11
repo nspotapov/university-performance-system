@@ -106,8 +106,8 @@ export const useAcademic = () => {
   }
 
   // Grades
-  const getGrades = async (gradebook_id: number) => {
-    return await $api<Page<Grade>>('v1/grades', { method: 'GET', query: { gradebook_id } })
+  const getGrades = async (gradebook_id: number, page = 1, size = 50) => {
+    return await $api<Page<Grade>>('v1/grades', { method: 'GET', query: { gradebook_id, page, size } })
   }
 
   const createGrade = async (data: GradeCreate) => {
@@ -124,6 +124,27 @@ export const useAcademic = () => {
 
   const deleteGrade = async (id: number) => {
     await $api(`v1/grades/${id}`, { method: 'DELETE' })
+  }
+
+  // Additional reference data
+  const getSemesters = async (page = 1, size = 50) => {
+    return await $api<Page<any>>('v1/semesters', { method: 'GET', query: { page, size } })
+  }
+
+  const getStudyGroups = async (page = 1, size = 50) => {
+    return await $api<Page<any>>('v1/study-groups', { method: 'GET', query: { page, size } })
+  }
+
+  const getDisciplines = async (page = 1, size = 50) => {
+    return await $api<Page<any>>('v1/disciplines', { method: 'GET', query: { page, size } })
+  }
+
+  const getTeachersList = async (page = 1, size = 50) => {
+    return await $api<Page<any>>('v1/teachers', { method: 'GET', query: { page, size } })
+  }
+
+  const getDepartments = async (page = 1, size = 50) => {
+    return await $api<Page<any>>('v1/departments', { method: 'GET', query: { page, size } })
   }
 
   // Analytics
@@ -146,6 +167,11 @@ export const useAcademic = () => {
     getFaculties,
     getStudyDirections,
     getCourses,
+    getSemesters,
+    getStudyGroups,
+    getDisciplines,
+    getTeachersList,
+    getDepartments,
     // Students
     getStudents,
     getStudent,

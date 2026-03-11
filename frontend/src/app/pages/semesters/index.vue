@@ -62,7 +62,8 @@ import type { Semester } from '~/types/university'
 
 definePageMeta({ middleware: ['auth'] })
 
-const { getSemesters, createSemester, updateSemester, deleteSemester, getCourses } = useUniversity()
+const { getSemesters, createSemester, updateSemester, deleteSemester } = useUniversity()
+const { getCourses } = useUniversity()
 const toast = useToast()
 
 const columns = [{ key: 'name', label: 'Название' }, { key: 'number', label: '№' }, { key: 'start_date', label: 'Начало' }, { key: 'end_date', label: 'Окончание' }, { key: 'is_active', label: 'Статус' }, { key: 'actions', label: 'Действия' }]

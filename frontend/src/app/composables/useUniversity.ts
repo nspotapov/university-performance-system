@@ -4,6 +4,7 @@ import type {
   StudyDirection, StudyDirectionCreate, StudyDirectionUpdate,
   Page,
 } from '~/types/university'
+import type { Student, Teacher } from '~/types/academic'
 
 export const useUniversity = () => {
   const { $api } = useNuxtApp()
@@ -114,6 +115,15 @@ export const useUniversity = () => {
     toast.add({ title: 'Успешно', description: 'Направление удалено', color: 'success' })
   }
 
+  // Students & Teachers (reference)
+  const getStudents = async (page = 1, size = 50) => {
+    return await $api<Page<Student>>('v1/students', { method: 'GET', query: { page, size } })
+  }
+
+  const getTeachers = async (page = 1, size = 50) => {
+    return await $api<Page<Teacher>>('v1/teachers', { method: 'GET', query: { page, size } })
+  }
+
   return {
     // Faculties
     getFaculties,
@@ -133,5 +143,8 @@ export const useUniversity = () => {
     createStudyDirection,
     updateStudyDirection,
     deleteStudyDirection,
+    // Students & Teachers
+    getStudents,
+    getTeachers,
   }
 }

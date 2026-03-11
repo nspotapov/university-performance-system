@@ -59,7 +59,8 @@ import type { Discipline } from '~/types/university'
 
 definePageMeta({ middleware: ['auth'] })
 
-const { getDisciplines, createDiscipline, updateDiscipline, deleteDiscipline, getStudyDirections, getDepartments } = useUniversity()
+const { getDisciplines, createDiscipline, updateDiscipline, deleteDiscipline } = useAcademic()
+const { getStudyDirections, getDepartments } = useAcademic()
 const toast = useToast()
 
 const columns = [{ key: 'name', label: 'Название' }, { key: 'code', label: 'Код' }, { key: 'hours', label: 'Часов' }, { key: 'actions', label: 'Действия' }]

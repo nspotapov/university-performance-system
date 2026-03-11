@@ -53,7 +53,8 @@ import type { Department } from '~/types/university'
 
 definePageMeta({ middleware: ['auth'] })
 
-const { getDepartments, createDepartment, updateDepartment, deleteDepartment, getFaculties } = useUniversity()
+const { getDepartments, createDepartment, updateDepartment, deleteDepartment } = useUniversity()
+const { getFaculties } = useUniversity()
 const toast = useToast()
 
 const columns = [{ key: 'name', label: 'Название' }, { key: 'short_name', label: 'Краткое название' }, { key: 'actions', label: 'Действия' }]
