@@ -27,12 +27,18 @@
     </UCard>
 
     <UModal v-model:open="showCreateModal">
+      <template #content>
+        <h2 class="text-xl font-bold mb-4">{{ editingItem ? 'Редактировать' : 'Создать' }}</h2>
+      </template>
+
+      <template #body>
       <div class="p-4">
         <h2 class="text-xl font-bold mb-4">{{ editingItem ? 'Редактировать' : 'Создать' }}</h2>
         <form @submit.prevent="onSubmit" class="space-y-4">
           <!-- Form fields will be preserved -->
         </form>
       </div>
+          </template>
     </UModal>
   </div>
 </template>

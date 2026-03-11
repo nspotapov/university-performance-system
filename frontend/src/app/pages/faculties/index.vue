@@ -50,38 +50,42 @@
     </UCard>
 
     <!-- Модалка создания/редактирования -->
-    <UModal v-model:open="showCreateModal" :dismissible="true">
-      <div class="p-4">
-        <h2 class="text-xl font-bold mb-4">
-          {{ editingFaculty ? 'Редактировать факультет' : 'Создать факультет' }}
-        </h2>
+    <UModal v-model:open="showCreateModal">
+      <template #default="{ close }">
+        <UCard>
+          <template #header>
+            <h2 class="text-xl font-bold">
+              {{ editingFaculty ? 'Редактировать факультет' : 'Создать факультет' }}
+            </h2>
+          </template>
 
-        <form @submit.prevent="onSubmit" class="space-y-4">
-          <div>
-            <label class="block text-sm font-medium mb-1">Название</label>
-            <UInput v-model="formState.name" class="w-full" />
-          </div>
+          <form @submit.prevent="onSubmit" class="space-y-4">
+            <div>
+              <label class="block text-sm font-medium mb-1">Название</label>
+              <UInput v-model="formState.name" class="w-full" />
+            </div>
 
-          <div>
-            <label class="block text-sm font-medium mb-1">Краткое название</label>
-            <UInput v-model="formState.short_name" class="w-full" />
-          </div>
+            <div>
+              <label class="block text-sm font-medium mb-1">Краткое название</label>
+              <UInput v-model="formState.short_name" class="w-full" />
+            </div>
 
-          <div>
-            <label class="block text-sm font-medium mb-1">Описание</label>
-            <UTextarea v-model="formState.description" class="w-full" />
-          </div>
+            <div>
+              <label class="block text-sm font-medium mb-1">Описание</label>
+              <UTextarea v-model="formState.description" class="w-full" />
+            </div>
 
-          <div class="flex gap-2 justify-end">
-            <UButton color="neutral" variant="ghost" @click="$emit('update:open', false); showCreateModal = false">
-              Отмена
-            </UButton>
-            <UButton type="submit" color="primary" :loading="isSubmitting">
-              {{ editingFaculty ? 'Сохранить' : 'Создать' }}
-            </UButton>
-          </div>
-        </form>
-      </div>
+            <div class="flex gap-2 justify-end">
+              <UButton color="neutral" variant="ghost" @click="close()">
+                Отмена
+              </UButton>
+              <UButton type="submit" color="primary" :loading="isSubmitting">
+                {{ editingFaculty ? 'Сохранить' : 'Создать' }}
+              </UButton>
+            </div>
+          </form>
+        </UCard>
+      </template>
     </UModal>
   </div>
 </template>
