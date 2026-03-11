@@ -1,3 +1,4 @@
+import logging
 import uvicorn
 from fastapi import FastAPI, Request, HTTPException, status
 
@@ -12,6 +13,21 @@ app = FastAPI(
     openapi_url="/api/openapi.json",
     redoc_url=None,
 )
+
+# List of endpoints to block from access logs
+BLOCK_ENDPOINTS = ["/health"]
+
+class EndpointFilter(logging.Filter):
+    def filter(self, record: logging.LogRecord) -> bool:
+        # Check if the log message contains any of the blocked endpoints
+        for endpoint in BLOCK_ENDPOINTS:
+            if endpoint in record.getMessage():
+                return False
+        return True
+    
+# Apply the filter to the 'uvicorn.access' logger
+uvicorn_access_logger = logging.getLogger("uvicorn.access")
+uvicorn_access_logger.addFilter(EndpointFilter())
 
 
 @app.exception_handler(ApplicationException)

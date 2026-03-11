@@ -6,6 +6,10 @@ router = APIRouter(
     prefix="/api",
 )
 
+@router.get("/health")
+async def get_health():
+    return {"status": "healthy"}
+
 router.include_router(v1)
 
 __all__ = (
